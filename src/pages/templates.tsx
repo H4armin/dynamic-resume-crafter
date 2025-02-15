@@ -19,28 +19,28 @@ const templates = [
     id: "basic",
     name: "Professional Resume",
     description: "Clean and professional layout for traditional industries",
-    image: "placeholder.svg",
+    image: "/lovable-uploads/5165ab84-9149-467b-9bcb-fc442d1a9be2.png",
     category: "professional"
   },
   {
     id: "modern",
     name: "Modern Creative",
     description: "Contemporary design with a creative touch",
-    image: "placeholder.svg",
+    image: "/lovable-uploads/2ae41880-7206-4676-a698-b48229c0b7d6.png",
     category: "creative"
   },
   {
     id: "simple",
     name: "Simple Classic",
     description: "Elegant design with a focus on experience",
-    image: "placeholder.svg",
+    image: "/lovable-uploads/5165ab84-9149-467b-9bcb-fc442d1a9be2.png",
     category: "simple"
   },
   {
     id: "ats-friendly",
     name: "ATS Optimized",
     description: "Designed to pass Applicant Tracking Systems",
-    image: "placeholder.svg",
+    image: "/lovable-uploads/2ae41880-7206-4676-a698-b48229c0b7d6.png",
     category: "ats"
   }
 ];
@@ -58,8 +58,8 @@ const Templates = () => {
     : templates.filter(template => template.category === selectedCategory);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
-      <div className="border-b bg-white sticky top-0 z-10 shadow-sm">
+    <div className="min-h-screen bg-black text-white">
+      <div className="border-b border-white/10 bg-black/50 backdrop-blur-lg sticky top-0 z-10">
         <div className="container mx-auto px-4">
           <div className="flex items-center gap-8 overflow-x-auto py-4">
             {categories.map((category) => {
@@ -70,8 +70,8 @@ const Templates = () => {
                   onClick={() => setSelectedCategory(category.id)}
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors whitespace-nowrap ${
                     selectedCategory === category.id
-                      ? "bg-black text-white"
-                      : "text-gray-600 hover:bg-gray-100"
+                      ? "bg-white text-black"
+                      : "text-white/70 hover:bg-white/10"
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -94,7 +94,7 @@ const Templates = () => {
               key={template.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow"
+              className="bg-white/5 backdrop-blur-lg rounded-xl overflow-hidden border border-white/10 hover:border-white/20 transition-all"
             >
               <div className="relative group">
                 <img
@@ -102,7 +102,7 @@ const Templates = () => {
                   alt={template.name}
                   className="w-full h-64 object-cover"
                 />
-                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
+                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
                   <div className="flex gap-2">
                     <Button
                       onClick={() => handleTemplateSelect(template.id)}
@@ -112,7 +112,7 @@ const Templates = () => {
                     </Button>
                     <Button
                       variant="outline"
-                      className="bg-white/10 text-white border-white hover:bg-white/20"
+                      className="border-white text-white hover:bg-white/20"
                       onClick={() => window.open(`/preview/${template.id}`, '_blank')}
                     >
                       <Eye className="w-4 h-4" />
@@ -121,8 +121,8 @@ const Templates = () => {
                 </div>
               </div>
               <div className="p-6">
-                <h3 className="text-xl font-semibold mb-2">{template.name}</h3>
-                <p className="text-gray-600">{template.description}</p>
+                <h3 className="text-xl font-semibold mb-2 text-white">{template.name}</h3>
+                <p className="text-white/70">{template.description}</p>
               </div>
             </motion.div>
           ))}
