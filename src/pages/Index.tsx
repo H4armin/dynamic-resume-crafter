@@ -2,8 +2,11 @@
 import { motion } from "framer-motion";
 import { ChevronRight, FileText, Sparkles, Layout } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const Index = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen w-full bg-gradient-to-b from-gray-50 to-gray-100">
       <div className="container mx-auto px-4 py-16 md:py-24">
@@ -33,6 +36,7 @@ const Index = () => {
             <Button
               size="lg"
               className="bg-black text-white hover:bg-gray-800 hover-lift"
+              onClick={() => navigate("/templates")}
             >
               Create Resume
               <ChevronRight className="ml-2 h-4 w-4" />
@@ -41,6 +45,7 @@ const Index = () => {
               variant="outline"
               size="lg"
               className="hover-lift"
+              onClick={() => navigate("/templates")}
             >
               View Templates
             </Button>
