@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Save, Download, Wand2 } from "lucide-react";
+import { Save, Download, Wand2, MoreHorizontal, CheckCircle2, Factory, Book } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -10,6 +10,13 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import { useIsMobile } from "@/hooks/use-mobile";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const formSchema = z.object({
   fullName: z.string().min(2, "Name must be at least 2 characters"),
@@ -35,7 +42,8 @@ type ResumeFormValues = z.infer<typeof formSchema>;
 const Editor = () => {
   const { templateId } = useParams();
   const [isGenerating, setIsGenerating] = useState(false);
-  
+  const isMobile = useIsMobile();
+
   const form = useForm<ResumeFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -49,14 +57,18 @@ const Editor = () => {
     }
   });
 
-  const generateAIContent = async (field: keyof ResumeFormValues) => {
+  const generateAIContent = async (field: keyof ResumeFormValues, action: string = "generate") => {
     setIsGenerating(true);
     try {
-      const prompt = getPromptForField(field, form.getValues());
-      const response = await fetch("/api/generate", {
+      const currentValue = form.getValues(field);
+      const response = await fetch("/api/generate-content", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt })
+        body: JSON.stringify({
+          field,
+          content: currentValue,
+          action
+        })
       });
 
       const data = await response.json();
@@ -72,22 +84,38 @@ const Editor = () => {
     }
   };
 
-  const getPromptForField = (field: keyof ResumeFormValues, values: ResumeFormValues) => {
-    switch (field) {
-      case "summary":
-        return `Write a professional summary for someone with the following details:
-                Name: ${values.fullName}
-                Experience: ${values.experience.map(e => e.title).join(", ")}
-                Skills: ${values.skills.join(", ")}`;
-      default:
-        return "";
-    }
-  };
-
-  const onSubmit = async (data: ResumeFormValues) => {
-    console.log("Form submitted:", data);
-    toast.success("Resume saved successfully!");
-  };
+  const AIDropdown = ({ field }: { field: keyof ResumeFormValues }) => (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="outline"
+          size="icon"
+          className="border-white/20 text-white"
+          disabled={isGenerating}
+        >
+          <Wand2 className="w-4 h-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-56 bg-black/90 backdrop-blur-lg border-white/10 text-white">
+        <DropdownMenuItem onClick={() => generateAIContent(field, "generate")}>
+          <CheckCircle2 className="mr-2 h-4 w-4" />
+          <span>Generate Content</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => generateAIContent(field, "professional")}>
+          <MoreHorizontal className="mr-2 h-4 w-4" />
+          <span>Make it Professional</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => generateAIContent(field, "simplify")}>
+          <Book className="mr-2 h-4 w-4" />
+          <span>Simplify Text</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => generateAIContent(field, "technical")}>
+          <Factory className="mr-2 h-4 w-4" />
+          <span>Enhance Technical Details</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
 
   const ResumePreview = ({ data }: { data: Partial<ResumeFormValues> }) => (
     <div className="bg-white p-8 rounded-xl shadow-lg">
@@ -154,8 +182,8 @@ const Editor = () => {
 
   return (
     <div className="min-h-screen bg-black text-white">
-      <div className="flex h-screen">
-        <div className="w-1/2 overflow-y-auto p-6 border-r border-white/10">
+      <div className={`flex ${isMobile ? 'flex-col' : 'h-screen'}`}>
+        <div className={`${isMobile ? 'w-full' : 'w-1/2'} overflow-y-auto p-6 border-r border-white/10`}>
           <div className="max-w-2xl mx-auto">
             <div className="flex justify-between items-center mb-8">
               <h1 className="text-2xl font-bold">Create Your Resume</h1>
@@ -231,16 +259,7 @@ const Editor = () => {
                               placeholder="Write a brief professional summary..."
                             />
                           </FormControl>
-                          <Button
-                            type="button"
-                            variant="outline"
-                            size="icon"
-                            className="border-white/20 text-white"
-                            onClick={() => generateAIContent("summary")}
-                            disabled={isGenerating}
-                          >
-                            <Wand2 className="w-4 h-4" />
-                          </Button>
+                          <AIDropdown field="summary" />
                         </div>
                       </FormItem>
                     )}
@@ -263,7 +282,7 @@ const Editor = () => {
           </div>
         </div>
 
-        <div className="w-1/2 bg-white/5 p-6 overflow-y-auto">
+        <div className={`${isMobile ? 'w-full' : 'w-1/2'} bg-white/5 p-6 overflow-y-auto`}>
           <div className="w-full h-full">
             <ResumePreview data={form.watch()} />
           </div>
