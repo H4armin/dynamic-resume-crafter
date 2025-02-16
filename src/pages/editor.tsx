@@ -73,35 +73,20 @@ const Editor = () => {
     try {
       const currentValue = form.getValues(field);
       
-      // Initialize Gemini AI
-      const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const response = await fetch("/api/generate-content", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          field,
+          content: currentValue,
+          action
+        })
+      });
 
-      // Prepare the prompt based on the action
-      let prompt = "";
-      switch (action) {
-        case "generate":
-          prompt = `Generate 3 professional variations for a resume ${field}. Current content: ${currentValue}. Format the response as 3 clear numbered options.`;
-          break;
-        case "professional":
-          prompt = `Make this resume ${field} more professional while maintaining accuracy: ${currentValue}`;
-          break;
-        case "simplify":
-          prompt = `Simplify this resume ${field} while keeping it professional and clear: ${currentValue}`;
-          break;
-        case "technical":
-          prompt = `Enhance the technical details in this resume ${field}, focusing on industry-specific terminology and achievements: ${currentValue}`;
-          break;
-        default:
-          prompt = `Improve this resume ${field}: ${currentValue}`;
-      }
+      const data = await response.json();
+      if (data.error) throw new Error(data.error);
 
-      // Generate content using Gemini
-      const result = await model.generateContent(prompt);
-      const generatedText = result.response.text();
-
-      // Update form with generated content
-      form.setValue(field, generatedText);
+      form.setValue(field, data.content);
       toast.success("Content generated successfully!");
     } catch (error) {
       toast.error("Failed to generate content. Please try again.");
