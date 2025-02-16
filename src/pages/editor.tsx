@@ -73,7 +73,7 @@ const Editor = () => {
     try {
       const currentValue = form.getValues(field);
       
-      const response = await fetch("/api/generate-content", {
+      const response = await fetch("/functions/generate-content", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
