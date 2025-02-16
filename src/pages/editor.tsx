@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -18,6 +17,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const formSchema = z.object({
   fullName: z.string().min(2, "Name must be at least 2 characters"),
@@ -72,20 +72,36 @@ const Editor = () => {
     setIsGenerating(true);
     try {
       const currentValue = form.getValues(field);
-      const response = await fetch("/api/generate-content", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          field,
-          content: currentValue,
-          action
-        })
-      });
+      
+      // Initialize Gemini AI
+      const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-      const data = await response.json();
-      if (data.error) throw new Error(data.error);
+      // Prepare the prompt based on the action
+      let prompt = "";
+      switch (action) {
+        case "generate":
+          prompt = `Generate 3 professional variations for a resume ${field}. Current content: ${currentValue}. Format the response as 3 clear numbered options.`;
+          break;
+        case "professional":
+          prompt = `Make this resume ${field} more professional while maintaining accuracy: ${currentValue}`;
+          break;
+        case "simplify":
+          prompt = `Simplify this resume ${field} while keeping it professional and clear: ${currentValue}`;
+          break;
+        case "technical":
+          prompt = `Enhance the technical details in this resume ${field}, focusing on industry-specific terminology and achievements: ${currentValue}`;
+          break;
+        default:
+          prompt = `Improve this resume ${field}: ${currentValue}`;
+      }
 
-      form.setValue(field, data.content);
+      // Generate content using Gemini
+      const result = await model.generateContent(prompt);
+      const generatedText = result.response.text();
+
+      // Update form with generated content
+      form.setValue(field, generatedText);
       toast.success("Content generated successfully!");
     } catch (error) {
       toast.error("Failed to generate content. Please try again.");
