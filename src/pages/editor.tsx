@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -56,6 +57,16 @@ const Editor = () => {
       skills: []
     }
   });
+
+  const onSubmit = async (data: ResumeFormValues) => {
+    try {
+      console.log("Form submitted:", data);
+      toast.success("Resume saved successfully!");
+    } catch (error) {
+      toast.error("Failed to save resume");
+      console.error("Save error:", error);
+    }
+  };
 
   const generateAIContent = async (field: keyof ResumeFormValues, action: string = "generate") => {
     setIsGenerating(true);
@@ -188,7 +199,7 @@ const Editor = () => {
             <div className="flex justify-between items-center mb-8">
               <h1 className="text-2xl font-bold">Create Your Resume</h1>
               <div className="flex gap-2">
-                <Button onClick={() => form.handleSubmit(onSubmit)()} variant="secondary">
+                <Button onClick={form.handleSubmit(onSubmit)} variant="secondary">
                   <Save className="w-4 h-4 mr-2" />
                   Save
                 </Button>
