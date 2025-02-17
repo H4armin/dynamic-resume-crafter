@@ -76,15 +76,27 @@ const Editor = () => {
 
   const handleDownloadPDF = async () => {
     try {
-      const success = await generatePDF("resume-preview", `${form.getValues("fullName")}_resume.pdf`);
+      setIsGenerating(true);
+      toast.info("Generating PDF...");
+      
+      // Ensure the preview is fully rendered
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      const success = await generatePDF(
+        "resume-preview", 
+        `${form.getValues("fullName").replace(/\s+/g, '_')}_resume.pdf`
+      );
+      
       if (success) {
         toast.success("Resume downloaded successfully!");
       } else {
         throw new Error("Failed to generate PDF");
       }
     } catch (error) {
-      toast.error("Failed to download resume");
       console.error("Download error:", error);
+      toast.error("Failed to download resume. Please try again.");
+    } finally {
+      setIsGenerating(false);
     }
   };
 
@@ -272,13 +284,22 @@ const Editor = () => {
             <div className="flex justify-between items-center mb-8">
               <h1 className="text-2xl font-bold">Create Your Resume</h1>
               <div className="flex gap-2">
-                <Button onClick={form.handleSubmit(onSubmit)} variant="secondary">
+                <Button 
+                  onClick={form.handleSubmit(onSubmit)} 
+                  variant="secondary"
+                  disabled={isGenerating}
+                >
                   <Save className="w-4 h-4 mr-2" />
                   Save
                 </Button>
-                <Button onClick={handleDownloadPDF} variant="outline" className="border-white/20 text-white">
+                <Button 
+                  onClick={handleDownloadPDF} 
+                  variant="outline" 
+                  className="border-white/20 text-white"
+                  disabled={isGenerating}
+                >
                   <Download className="w-4 h-4 mr-2" />
-                  Download PDF
+                  {isGenerating ? "Generating..." : "Download PDF"}
                 </Button>
               </div>
             </div>
@@ -367,7 +388,7 @@ const Editor = () => {
         </div>
 
         <div className={`${isMobile ? 'w-full' : 'w-1/2'} bg-white/5 p-6 overflow-y-auto`}>
-          <div className="w-full h-full">
+          <div id="resume-preview" className="w-full h-full bg-white rounded-lg shadow-lg">
             <ResumePreview data={form.watch()} />
           </div>
         </div>

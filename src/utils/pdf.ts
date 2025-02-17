@@ -5,22 +5,56 @@ import jsPDF from "jspdf";
 export const generatePDF = async (elementId: string, filename: string = "resume.pdf") => {
   try {
     const element = document.getElementById(elementId);
-    if (!element) throw new Error("Element not found");
+    if (!element) {
+      console.error("Element not found:", elementId);
+      return false;
+    }
+
+    // Wait for all images to load
+    const images = element.getElementsByTagName("img");
+    await Promise.all(Array.from(images).map(img => {
+      if (img.complete) return Promise.resolve();
+      return new Promise(resolve => {
+        img.onload = resolve;
+        img.onerror = resolve;
+      });
+    }));
 
     const canvas = await html2canvas(element, {
-      scale: 2,
+      scale: 2, // Higher quality
       useCORS: true,
-      logging: false
+      logging: true, // Enable logging for debugging
+      backgroundColor: "#ffffff", // Ensure white background
+      windowWidth: element.scrollWidth,
+      windowHeight: element.scrollHeight
     });
 
-    const imgData = canvas.toDataURL("image/png");
+    // Calculate PDF dimensions to match A4 format
+    const imgWidth = 210; // A4 width in mm
+    const pageHeight = 297; // A4 height in mm
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    let heightLeft = imgHeight;
+
     const pdf = new jsPDF({
-      orientation: "portrait",
-      unit: "px",
-      format: [canvas.width, canvas.height]
+      orientation: heightLeft > pageHeight ? "portrait" : "landscape",
+      unit: "mm",
+      format: "a4"
     });
 
-    pdf.addImage(imgData, "PNG", 0, 0, canvas.width, canvas.height);
+    let position = 0;
+
+    // Add image to PDF
+    pdf.addImage(
+      canvas.toDataURL("image/jpeg", 1.0),
+      "JPEG",
+      0,
+      position,
+      imgWidth,
+      imgHeight,
+      undefined,
+      'FAST'
+    );
+
     pdf.save(filename);
     return true;
   } catch (error) {
