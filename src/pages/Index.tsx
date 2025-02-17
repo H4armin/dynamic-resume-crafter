@@ -1,6 +1,6 @@
 
 import { motion } from "framer-motion";
-import { ChevronRight, Shield, Download, Clock, Lock, FileText } from "lucide-react";
+import { ChevronRight, Shield, Download, Clock, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 
@@ -8,7 +8,7 @@ const Index = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-b from-gray-50 to-gray-100">
+    <div className="min-h-screen w-full bg-white">
       <div className="container mx-auto px-4 py-8 md:py-16 space-y-20">
         {/* Hero Section */}
         <motion.div
@@ -17,10 +17,16 @@ const Index = () => {
           transition={{ duration: 0.6 }}
           className="text-center space-y-6"
         >
+          <div className="inline-flex rounded-full bg-black/5 px-3 py-1 text-sm leading-6 text-black ring-1 ring-black/10 hover:ring-black/20 mb-8">
+            AI-Powered Resume Builder
+          </div>
+
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-gray-900">
             Build Your Resume Instantly
             <br />
-            <span className="text-purple-600">Secure, Private, and Free!</span>
+            <span className="bg-gradient-to-r from-purple-600 to-violet-600 bg-clip-text text-transparent">
+              Secure, Private, and Free!
+            </span>
           </h1>
           
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
@@ -30,7 +36,7 @@ const Index = () => {
           <div className="flex items-center justify-center gap-4 pt-4">
             <Button
               size="lg"
-              className="bg-purple-600 text-white hover:bg-purple-700 hover-lift"
+              className="bg-violet-600 text-white hover:bg-violet-700 hover-lift"
               onClick={() => navigate("/templates")}
             >
               Create Resume
@@ -39,7 +45,7 @@ const Index = () => {
           </div>
         </motion.div>
 
-        {/* Privacy Section */}
+        {/* Features Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -53,7 +59,7 @@ const Index = () => {
             { icon: Download, title: "Instant Download", desc: "Generate and download your resume as PDF effortlessly" },
           ].map((item, i) => (
             <div key={i} className="glass p-6 rounded-xl text-center hover-lift">
-              <item.icon className="w-12 h-12 mx-auto mb-4 text-purple-600" />
+              <item.icon className="w-12 h-12 mx-auto mb-4 text-violet-600" />
               <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
               <p className="text-gray-600">{item.desc}</p>
             </div>
@@ -75,7 +81,7 @@ const Index = () => {
               { number: "3", title: "Preview & Download", desc: "Save your resume as a PDF directly on your device" },
             ].map((step, i) => (
               <div key={i} className="relative">
-                <div className="text-4xl font-bold text-purple-600 mb-4">{step.number}</div>
+                <div className="text-4xl font-bold text-violet-600 mb-4">{step.number}</div>
                 <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
                 <p className="text-gray-600">{step.desc}</p>
               </div>
@@ -93,15 +99,15 @@ const Index = () => {
             <div>
               <h3 className="font-semibold mb-4">Follow Us</h3>
               <div className="space-x-4">
-                <a href="#" className="text-gray-600 hover:text-purple-600">Twitter</a>
-                <a href="#" className="text-gray-600 hover:text-purple-600">LinkedIn</a>
+                <a href="#" className="text-gray-600 hover:text-violet-600">Twitter</a>
+                <a href="#" className="text-gray-600 hover:text-violet-600">LinkedIn</a>
               </div>
             </div>
             <div>
               <h3 className="font-semibold mb-4">Legal</h3>
               <div className="space-x-4">
-                <a href="#" className="text-gray-600 hover:text-purple-600">Privacy Policy</a>
-                <a href="#" className="text-gray-600 hover:text-purple-600">Terms & Conditions</a>
+                <a href="#" className="text-gray-600 hover:text-violet-600">Privacy Policy</a>
+                <a href="#" className="text-gray-600 hover:text-violet-600">Terms & Conditions</a>
               </div>
             </div>
           </div>
