@@ -21,3 +21,14 @@ export interface ResumeFormValues {
   education: EducationItem[];
   skills: string[];
 }
+
+// Default values for the form
+export const defaultResumeValues: ResumeFormValues = {
+  fullName: "",
+  email: "",
+  phone: "",
+  summary: "",
+  experience: [],
+  education: [],
+  skills: []
+};
