@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -21,7 +20,6 @@ import {
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { saveResumeToStorage, loadResumeFromStorage } from "@/utils/storage";
 import { generatePDF } from "@/utils/pdf";
-import type { ResumeFormValues } from "@/types/resume";
 
 const formSchema = z.object({
   fullName: z.string().min(2, "Name must be at least 2 characters"),
@@ -41,6 +39,8 @@ const formSchema = z.object({
   })).min(1, "Add at least one education entry"),
   skills: z.array(z.string()).min(3, "Add at least 3 skills")
 });
+
+type ResumeFormValues = z.infer<typeof formSchema>;
 
 const Editor = () => {
   const { templateId } = useParams();
@@ -88,8 +88,69 @@ const Editor = () => {
     }
   };
 
+  const generateAIContent = async (field: keyof ResumeFormValues, action: string = "generate") => {
+    setIsGenerating(true);
+    try {
+      const currentValue = form.getValues(field);
+      
+      const response = await fetch("/functions/generate-content", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          field,
+          content: currentValue,
+          action
+        })
+      });
+
+      const data = await response.json();
+      if (data.error) throw new Error(data.error);
+
+      form.setValue(field, data.content);
+      toast.success("Content generated successfully!");
+    } catch (error) {
+      toast.error("Failed to generate content. Please try again.");
+      console.error("AI generation error:", error);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const AIDropdown = ({ field }: { field: keyof ResumeFormValues }) => (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="outline"
+          size="icon"
+          className="border-white/20 text-white"
+          disabled={isGenerating}
+        >
+          <Wand2 className="w-4 h-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-56 bg-black/90 backdrop-blur-lg border-white/10 text-white">
+        <DropdownMenuItem onClick={() => generateAIContent(field, "generate")}>
+          <CheckCircle2 className="mr-2 h-4 w-4" />
+          <span>Generate Content</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => generateAIContent(field, "professional")}>
+          <MoreHorizontal className="mr-2 h-4 w-4" />
+          <span>Make it Professional</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => generateAIContent(field, "simplify")}>
+          <Book className="mr-2 h-4 w-4" />
+          <span>Simplify Text</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => generateAIContent(field, "technical")}>
+          <Factory className="mr-2 h-4 w-4" />
+          <span>Enhance Technical Details</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+
   const ResumePreview = ({ data }: { data: Partial<ResumeFormValues> }) => (
-    <div id="resume-preview" className="bg-white p-8 rounded-xl shadow-lg">
+    <div className="bg-white p-8 rounded-xl shadow-lg">
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">{data.fullName || "Your Name"}</h1>
         <div className="text-gray-600 space-x-4">
@@ -100,7 +161,7 @@ const Editor = () => {
       </div>
 
       <div className="mb-8">
-        <h2 className="text-xl font-semibold text-purple-600 mb-3 border-b border-gray-200 pb-2">
+        <h2 className="text-xl font-semibold text-gray-900 mb-3 border-b border-gray-200 pb-2">
           Professional Summary
         </h2>
         <p className="text-gray-700 leading-relaxed">
@@ -109,7 +170,7 @@ const Editor = () => {
       </div>
 
       <div className="mb-8">
-        <h2 className="text-xl font-semibold text-purple-600 mb-3 border-b border-gray-200 pb-2">
+        <h2 className="text-xl font-semibold text-gray-900 mb-3 border-b border-gray-200 pb-2">
           Experience
         </h2>
         {data.experience?.map((exp, index) => (
@@ -122,7 +183,7 @@ const Editor = () => {
       </div>
 
       <div className="mb-8">
-        <h2 className="text-xl font-semibold text-purple-600 mb-3 border-b border-gray-200 pb-2">
+        <h2 className="text-xl font-semibold text-gray-900 mb-3 border-b border-gray-200 pb-2">
           Education
         </h2>
         {data.education?.map((edu, index) => (
@@ -134,14 +195,14 @@ const Editor = () => {
       </div>
 
       <div>
-        <h2 className="text-xl font-semibold text-purple-600 mb-3 border-b border-gray-200 pb-2">
+        <h2 className="text-xl font-semibold text-gray-900 mb-3 border-b border-gray-200 pb-2">
           Skills
         </h2>
         <div className="flex flex-wrap gap-2">
           {data.skills?.map((skill, index) => (
             <span
               key={index}
-              className="bg-purple-50 text-purple-700 px-3 py-1 rounded-full text-sm"
+              className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm"
             >
               {skill}
             </span>
@@ -222,32 +283,31 @@ const Editor = () => {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-white">Professional Summary</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            {...field}
-                            className="bg-white/5 border-white/10 text-white h-32"
-                            placeholder="Write a brief professional summary..."
-                          />
-                        </FormControl>
+                        <div className="flex gap-2">
+                          <FormControl>
+                            <Textarea
+                              {...field}
+                              className="bg-white/5 border-white/10 text-white h-32"
+                              placeholder="Write a brief professional summary..."
+                            />
+                          </FormControl>
+                          <AIDropdown field="summary" />
+                        </div>
                       </FormItem>
                     )}
                   />
                 </div>
 
-                {/* Additional form sections for experience, education, and skills */}
                 <div className="bg-white/5 backdrop-blur-lg rounded-xl p-6 space-y-4 border border-white/10">
                   <h2 className="text-xl font-semibold mb-4">Experience</h2>
-                  {/* Add experience fields here */}
                 </div>
 
                 <div className="bg-white/5 backdrop-blur-lg rounded-xl p-6 space-y-4 border border-white/10">
                   <h2 className="text-xl font-semibold mb-4">Education</h2>
-                  {/* Add education fields here */}
                 </div>
 
                 <div className="bg-white/5 backdrop-blur-lg rounded-xl p-6 space-y-4 border border-white/10">
                   <h2 className="text-xl font-semibold mb-4">Skills</h2>
-                  {/* Add skills fields here */}
                 </div>
               </form>
             </Form>
