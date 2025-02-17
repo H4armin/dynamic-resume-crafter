@@ -21,51 +21,43 @@ import {
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { saveResumeToStorage, loadResumeFromStorage } from "@/utils/storage";
 import { generatePDF } from "@/utils/pdf";
-import type { ResumeFormValues, ExperienceItem, EducationItem } from "@/types/resume";
-
-const experienceSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  company: z.string().min(1, "Company is required"),
-  period: z.string().min(1, "Period is required"),
-  description: z.string().min(1, "Description is required")
-});
-
-const educationSchema = z.object({
-  degree: z.string().min(1, "Degree is required"),
-  school: z.string().min(1, "School is required"),
-  year: z.string().min(1, "Year is required")
-});
+import type { ResumeFormValues } from "@/types/resume";
 
 const formSchema = z.object({
   fullName: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Invalid email address"),
   phone: z.string().min(10, "Please enter a valid phone number"),
   summary: z.string().min(50, "Professional summary should be at least 50 characters"),
-  experience: z.array(experienceSchema).min(1, "Add at least one experience"),
-  education: z.array(educationSchema).min(1, "Add at least one education entry"),
+  experience: z.array(z.object({
+    title: z.string(),
+    company: z.string(),
+    period: z.string(),
+    description: z.string()
+  })).min(1, "Add at least one experience"),
+  education: z.array(z.object({
+    degree: z.string(),
+    school: z.string(),
+    year: z.string()
+  })).min(1, "Add at least one education entry"),
   skills: z.array(z.string()).min(3, "Add at least 3 skills")
-}) satisfies z.ZodType<ResumeFormValues>;
-
-type FormSchema = z.infer<typeof formSchema>;
+});
 
 const Editor = () => {
   const { templateId } = useParams();
   const [isGenerating, setIsGenerating] = useState(false);
   const isMobile = useIsMobile();
 
-  const defaultValues: ResumeFormValues = {
-    fullName: "",
-    email: "",
-    phone: "",
-    summary: "",
-    experience: [{ title: "", company: "", period: "", description: "" }],
-    education: [{ degree: "", school: "", year: "" }],
-    skills: []
-  };
-
   const form = useForm<ResumeFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: loadResumeFromStorage() || defaultValues
+    defaultValues: loadResumeFromStorage() || {
+      fullName: "",
+      email: "",
+      phone: "",
+      summary: "",
+      experience: [{ title: "", company: "", period: "", description: "" }],
+      education: [{ degree: "", school: "", year: "" }],
+      skills: []
+    }
   });
 
   const onSubmit = async (data: ResumeFormValues) => {
