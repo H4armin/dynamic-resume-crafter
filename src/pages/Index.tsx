@@ -24,7 +24,7 @@ const Index = () => {
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-gray-900">
             Build Your Resume Instantly
             <br />
-            <span className="bg-gradient-to-r from-purple-600 to-violet-600 bg-clip-text text-transparent">
+            <span className="text-black">
               Secure, Private, and Free!
             </span>
           </h1>
@@ -36,7 +36,7 @@ const Index = () => {
           <div className="flex items-center justify-center gap-4 pt-4">
             <Button
               size="lg"
-              className="bg-violet-600 text-white hover:bg-violet-700 hover-lift"
+              className="bg-black text-white hover:bg-gray-800 hover-lift"
               onClick={() => navigate("/templates")}
             >
               Create Resume
@@ -59,7 +59,7 @@ const Index = () => {
             { icon: Download, title: "Instant Download", desc: "Generate and download your resume as PDF effortlessly" },
           ].map((item, i) => (
             <div key={i} className="glass p-6 rounded-xl text-center hover-lift">
-              <item.icon className="w-12 h-12 mx-auto mb-4 text-violet-600" />
+              <item.icon className="w-12 h-12 mx-auto mb-4 text-black" />
               <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
               <p className="text-gray-600">{item.desc}</p>
             </div>
@@ -81,7 +81,7 @@ const Index = () => {
               { number: "3", title: "Preview & Download", desc: "Save your resume as a PDF directly on your device" },
             ].map((step, i) => (
               <div key={i} className="relative">
-                <div className="text-4xl font-bold text-violet-600 mb-4">{step.number}</div>
+                <div className="text-4xl font-bold text-black mb-4">{step.number}</div>
                 <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
                 <p className="text-gray-600">{step.desc}</p>
               </div>
@@ -99,15 +99,15 @@ const Index = () => {
             <div>
               <h3 className="font-semibold mb-4">Follow Us</h3>
               <div className="space-x-4">
-                <a href="#" className="text-gray-600 hover:text-violet-600">Twitter</a>
-                <a href="#" className="text-gray-600 hover:text-violet-600">LinkedIn</a>
+                <a href="#" className="text-gray-600 hover:text-black">Twitter</a>
+                <a href="#" className="text-gray-600 hover:text-black">LinkedIn</a>
               </div>
             </div>
             <div>
               <h3 className="font-semibold mb-4">Legal</h3>
               <div className="space-x-4">
-                <a href="#" className="text-gray-600 hover:text-violet-600">Privacy Policy</a>
-                <a href="#" className="text-gray-600 hover:text-violet-600">Terms & Conditions</a>
+                <a href="#" className="text-gray-600 hover:text-black">Privacy Policy</a>
+                <a href="#" className="text-gray-600 hover:text-black">Terms & Conditions</a>
               </div>
             </div>
           </div>
