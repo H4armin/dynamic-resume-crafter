@@ -72,11 +72,13 @@ const Editor = () => {
     setIsGenerating(true);
     try {
       const currentValue = form.getValues(field);
-      
-      // Initialize Gemini AI
-      const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
+  
+      // Safety check for API key
+      const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+      if (!API_KEY) {
+        throw new Error("API key not configured");
+      }
+  
       // Prepare the prompt based on the action
       let prompt = "";
       switch (action) {
@@ -95,21 +97,56 @@ const Editor = () => {
         default:
           prompt = `Improve this resume ${field}: ${currentValue}`;
       }
-
-      // Generate content using Gemini
-      const result = await model.generateContent(prompt);
-      const generatedText = result.response.text();
-
+  
+      // API endpoint
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+  
+      // Request payload
+      const requestBody = {
+        contents: [
+          {
+            parts: [{ text: prompt }],
+          },
+        ],
+      };
+  
+      // API request
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+        mode: "cors",
+      });
+  
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status} ${response.statusText}`);
+      }
+  
+      const data = await response.json();
+  
+      // Extract generated content
+      const generatedText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (!generatedText) {
+        throw new Error("No content generated");
+      }
+  
       // Update form with generated content
       form.setValue(field, generatedText);
       toast.success("Content generated successfully!");
     } catch (error) {
-      toast.error("Failed to generate content. Please try again.");
+      let errorMessage = "Failed to generate content. Please try again.";
+      if (error instanceof Error) {
+        errorMessage += ` (${error.message})`;
+      }
+      toast.error(errorMessage);
       console.error("AI generation error:", error);
     } finally {
       setIsGenerating(false);
     }
   };
+  
 
   const AIDropdown = ({ field }: { field: keyof ResumeFormValues }) => (
     <DropdownMenu>
