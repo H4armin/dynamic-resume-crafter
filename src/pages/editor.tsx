@@ -18,6 +18,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { saveResumeToStorage, loadResumeFromStorage } from "@/utils/storage";
+import { generatePDF } from "@/utils/pdf";
 
 const formSchema = z.object({
   fullName: z.string().min(2, "Name must be at least 2 characters"),
@@ -47,7 +49,7 @@ const Editor = () => {
 
   const form = useForm<ResumeFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
+    defaultValues: loadResumeFromStorage() || {
       fullName: "",
       email: "",
       phone: "",
@@ -60,11 +62,29 @@ const Editor = () => {
 
   const onSubmit = async (data: ResumeFormValues) => {
     try {
-      console.log("Form submitted:", data);
-      toast.success("Resume saved successfully!");
+      const saved = saveResumeToStorage(data);
+      if (saved) {
+        toast.success("Resume saved successfully!");
+      } else {
+        throw new Error("Failed to save resume");
+      }
     } catch (error) {
       toast.error("Failed to save resume");
       console.error("Save error:", error);
+    }
+  };
+
+  const handleDownloadPDF = async () => {
+    try {
+      const success = await generatePDF("resume-preview", `${form.getValues("fullName")}_resume.pdf`);
+      if (success) {
+        toast.success("Resume downloaded successfully!");
+      } else {
+        throw new Error("Failed to generate PDF");
+      }
+    } catch (error) {
+      toast.error("Failed to download resume");
+      console.error("Download error:", error);
     }
   };
 
@@ -256,7 +276,7 @@ const Editor = () => {
                   <Save className="w-4 h-4 mr-2" />
                   Save
                 </Button>
-                <Button variant="outline" className="border-white/20 text-white">
+                <Button onClick={handleDownloadPDF} variant="outline" className="border-white/20 text-white">
                   <Download className="w-4 h-4 mr-2" />
                   Download PDF
                 </Button>

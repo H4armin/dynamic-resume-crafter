@@ -1,6 +1,7 @@
 
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -15,46 +16,40 @@ serve(async (req) => {
   try {
     const { field, content, action } = await req.json();
 
+    // Initialize Gemini AI
+    const genAI = new GoogleGenerativeAI(Deno.env.get('GEMINI_API_KEY') || '');
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+    // Prepare prompt based on action
     let prompt = "";
     switch (action) {
       case "generate":
-        prompt = `Generate 3 professional variations for a resume ${field}. Current content: ${content}`;
+        prompt = `Generate 3 professional variations for a resume ${field}. Current content: ${content}. Format the response as 3 clear numbered options.`;
         break;
       case "professional":
-        prompt = `Make this resume ${field} more professional: ${content}`;
+        prompt = `Make this resume ${field} more professional while maintaining accuracy: ${content}`;
         break;
       case "simplify":
-        prompt = `Simplify this resume ${field} while keeping it professional: ${content}`;
+        prompt = `Simplify this resume ${field} while keeping it professional and clear: ${content}`;
         break;
       case "technical":
-        prompt = `Enhance the technical details in this resume ${field}: ${content}`;
+        prompt = `Enhance the technical details in this resume ${field}, focusing on industry-specific terminology and achievements: ${content}`;
         break;
       default:
         prompt = `Improve this resume ${field}: ${content}`;
     }
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${Deno.env.get('OPENAI_API_KEY')}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'gpt-4o-mini',
-        messages: [
-          { role: 'system', content: 'You are a professional resume writer helping to create compelling content.' },
-          { role: 'user', content: prompt }
-        ],
-      }),
-    });
+    // Generate content using Gemini
+    const result = await model.generateContent(prompt);
+    const generatedText = result.response.text();
 
-    const data = await response.json();
     return new Response(JSON.stringify({
-      content: data.choices[0].message.content,
+      content: generatedText,
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   } catch (error) {
+    console.error('Generation error:', error);
     return new Response(JSON.stringify({ error: error.message }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
