@@ -20,6 +20,7 @@ import {
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { saveResumeToStorage, loadResumeFromStorage } from "@/utils/storage";
 import { generatePDF } from "@/utils/pdf";
+import { ResumeFormValues, defaultResumeValues } from "@/types/resume";
 
 const formSchema = z.object({
   fullName: z.string().min(2, "Name must be at least 2 characters"),
@@ -40,8 +41,6 @@ const formSchema = z.object({
   skills: z.array(z.string()).min(3, "Add at least 3 skills")
 });
 
-type ResumeFormValues = z.infer<typeof formSchema>;
-
 const Editor = () => {
   const { templateId } = useParams();
   const [isGenerating, setIsGenerating] = useState(false);
@@ -49,15 +48,7 @@ const Editor = () => {
 
   const form = useForm<ResumeFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: loadResumeFromStorage() || {
-      fullName: "",
-      email: "",
-      phone: "",
-      summary: "",
-      experience: [{ title: "", company: "", period: "", description: "" }],
-      education: [{ degree: "", school: "", year: "" }],
-      skills: []
-    }
+    defaultValues: loadResumeFromStorage() || defaultResumeValues
   });
 
   const onSubmit = async (data: ResumeFormValues) => {
@@ -178,7 +169,6 @@ const Editor = () => {
       setIsGenerating(false);
     }
   };
-  
 
   const AIDropdown = ({ field }: { field: keyof ResumeFormValues }) => (
     <DropdownMenu>
