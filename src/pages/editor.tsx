@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -22,28 +23,30 @@ import { saveResumeToStorage, loadResumeFromStorage } from "@/utils/storage";
 import { generatePDF } from "@/utils/pdf";
 import { ResumeFormValues, defaultResumeValues, ExperienceItem, EducationItem } from "@/types/resume";
 
+// Define Zod schemas that exactly match our types
 const experienceSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  company: z.string().min(1, "Company is required"),
-  period: z.string().min(1, "Period is required"),
-  description: z.string().min(1, "Description is required")
-});
+  title: z.string(),
+  company: z.string(),
+  period: z.string(),
+  description: z.string()
+}).required();
 
 const educationSchema = z.object({
-  degree: z.string().min(1, "Degree is required"),
-  school: z.string().min(1, "School is required"),
-  year: z.string().min(1, "Year is required")
-});
+  degree: z.string(),
+  school: z.string(),
+  year: z.string()
+}).required();
 
+// Main form schema that matches ResumeFormValues exactly
 const formSchema = z.object({
-  fullName: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Invalid email address"),
-  phone: z.string().min(10, "Please enter a valid phone number"),
-  summary: z.string().min(50, "Professional summary should be at least 50 characters"),
-  experience: z.array(experienceSchema).min(1, "Add at least one experience"),
-  education: z.array(educationSchema).min(1, "Add at least one education entry"),
-  skills: z.array(z.string()).min(3, "Add at least 3 skills")
-});
+  fullName: z.string(),
+  email: z.string(),
+  phone: z.string(),
+  summary: z.string(),
+  experience: z.array(experienceSchema),
+  education: z.array(educationSchema),
+  skills: z.array(z.string())
+}).required();
 
 const Editor = () => {
   const { templateId } = useParams();
@@ -58,16 +61,16 @@ const Editor = () => {
 
   const onSubmit = async (data: ResumeFormValues) => {
     try {
-      console.log("Submitting form data:", data); // Debug log
+      console.log("Submitting form data:", data);
       const saved = saveResumeToStorage(data);
       if (saved) {
         toast.success("Resume saved successfully!");
-        console.log("Resume saved to storage"); // Debug log
+        console.log("Resume saved to storage");
       } else {
         throw new Error("Failed to save resume");
       }
     } catch (error) {
-      console.error("Save error:", error); // Debug log
+      console.error("Save error:", error);
       toast.error("Failed to save resume");
     }
   };
