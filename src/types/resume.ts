@@ -28,7 +28,16 @@ export const defaultResumeValues: ResumeFormValues = {
   email: "",
   phone: "",
   summary: "",
-  experience: [],
-  education: [],
+  experience: [{
+    title: "",
+    company: "",
+    period: "",
+    description: ""
+  }],
+  education: [{
+    degree: "",
+    school: "",
+    year: ""
+  }],
   skills: []
 };
