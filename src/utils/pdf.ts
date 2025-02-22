@@ -23,34 +23,34 @@ export const generatePDF = async (elementId: string, filename: string = "resume.
     const canvas = await html2canvas(element, {
       scale: 2, // Higher quality
       useCORS: true,
-      logging: true, // Enable logging for debugging
-      backgroundColor: "#ffffff", // Ensure white background
+      logging: true,
+      backgroundColor: "#ffffff",
       windowWidth: element.scrollWidth,
       windowHeight: element.scrollHeight
     });
 
-    // Calculate PDF dimensions to match A4 format
-    const imgWidth = 210; // A4 width in mm
-    const pageHeight = 297; // A4 height in mm
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-    let heightLeft = imgHeight;
+    // A4 dimensions in mm
+    const imgWidth = 210;
+    const imgHeight = 297;
 
     const pdf = new jsPDF({
-      orientation: heightLeft > pageHeight ? "portrait" : "landscape",
+      orientation: "portrait",
       unit: "mm",
       format: "a4"
     });
 
-    let position = 0;
-
-    // Add image to PDF
+    // Calculate the scaling ratio to fit the content to A4
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = pdf.internal.pageSize.getHeight();
+    
+    // Add image to PDF maintaining A4 proportions
     pdf.addImage(
       canvas.toDataURL("image/jpeg", 1.0),
       "JPEG",
       0,
-      position,
-      imgWidth,
-      imgHeight,
+      0,
+      pdfWidth,
+      pdfHeight,
       undefined,
       'FAST'
     );

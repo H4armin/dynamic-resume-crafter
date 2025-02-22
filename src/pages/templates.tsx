@@ -16,46 +16,46 @@ const categories = [
 
 const templates = [
   {
-    id: "minimal",
-    name: "Minimal Resume",
-    description: "Clean and minimalist design for a professional look",
-    image: "/lovable-uploads/5165ab84-9149-467b-9bcb-fc442d1a9be2.png",
+    id: "template1",
+    name: "Professional Classic",
+    description: "Traditional layout with modern typography",
+    image: "/lovable-uploads/template1.png",
     category: "professional"
   },
   {
-    id: "stockholm",
-    name: "Stockholm",
-    description: "Modern and creative design with unique layout",
-    image: "/lovable-uploads/2ae41880-7206-4676-a698-b48229c0b7d6.png",
+    id: "template2",
+    name: "Creative Modern",
+    description: "Unique two-column design with bold accents",
+    image: "/lovable-uploads/template2.png",
     category: "creative"
   },
   {
-    id: "berlin",
-    name: "Berlin",
-    description: "Bold and impactful design for creative professionals",
-    image: "/lovable-uploads/5165ab84-9149-467b-9bcb-fc442d1a9be2.png",
-    category: "creative"
-  },
-  {
-    id: "tokyo",
-    name: "Tokyo",
-    description: "Modern minimalist design with Japanese influence",
-    image: "/lovable-uploads/2ae41880-7206-4676-a698-b48229c0b7d6.png",
-    category: "modern"
-  },
-  {
-    id: "amsterdam",
-    name: "Amsterdam",
-    description: "Classic European design with modern elements",
-    image: "/lovable-uploads/5165ab84-9149-467b-9bcb-fc442d1a9be2.png",
+    id: "template3",
+    name: "Executive Clean",
+    description: "Sophisticated design for senior professionals",
+    image: "/lovable-uploads/template3.png",
     category: "professional"
   },
   {
-    id: "sydney",
-    name: "Sydney",
-    description: "Vibrant and fresh design for standing out",
-    image: "/lovable-uploads/2ae41880-7206-4676-a698-b48229c0b7d6.png",
+    id: "template4",
+    name: "Minimal Impact",
+    description: "Clean design with effective space utilization",
+    image: "/lovable-uploads/template4.png",
+    category: "simple"
+  },
+  {
+    id: "template5",
+    name: "Modern Tech",
+    description: "Contemporary layout for tech professionals",
+    image: "/lovable-uploads/template5.png",
     category: "modern"
+  },
+  {
+    id: "template6",
+    name: "ATS Optimized",
+    description: "Structured layout for ATS compatibility",
+    image: "/lovable-uploads/template6.png",
+    category: "ats"
   }
 ];
 
@@ -110,11 +110,11 @@ const Templates = () => {
               animate={{ opacity: 1, y: 0 }}
               className="bg-white/5 backdrop-blur-lg rounded-xl overflow-hidden border border-white/10 hover:border-white/20 transition-all"
             >
-              <div className="relative group">
+              <div className="relative group aspect-[210/297]">
                 <img
                   src={template.image}
                   alt={template.name}
-                  className="w-full h-64 object-cover"
+                  className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
                   <div className="flex gap-2">
