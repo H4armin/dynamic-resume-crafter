@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -23,26 +22,26 @@ import { saveResumeToStorage, loadResumeFromStorage } from "@/utils/storage";
 import { generatePDF } from "@/utils/pdf";
 import { ResumeFormValues, defaultResumeValues, ExperienceItem, EducationItem } from "@/types/resume";
 
-// Define Zod schemas that exactly match our types
+// Define Zod schemas that matches our types exactly
 const experienceSchema = z.object({
-  title: z.string(),
-  company: z.string(),
-  period: z.string(),
-  description: z.string()
+  title: z.string().min(1),
+  company: z.string().min(1),
+  period: z.string().min(1),
+  description: z.string().min(1)
 }).required();
 
 const educationSchema = z.object({
-  degree: z.string(),
-  school: z.string(),
-  year: z.string()
+  degree: z.string().min(1),
+  school: z.string().min(1),
+  year: z.string().min(1)
 }).required();
 
 // Main form schema that matches ResumeFormValues exactly
 const formSchema = z.object({
-  fullName: z.string(),
-  email: z.string(),
-  phone: z.string(),
-  summary: z.string(),
+  fullName: z.string().min(1),
+  email: z.string().min(1).email(),
+  phone: z.string().min(1),
+  summary: z.string().min(1),
   experience: z.array(experienceSchema),
   education: z.array(educationSchema),
   skills: z.array(z.string())
