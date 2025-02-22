@@ -20,32 +20,30 @@ import {
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { saveResumeToStorage, loadResumeFromStorage } from "@/utils/storage";
 import { generatePDF } from "@/utils/pdf";
-import { ResumeFormValues, defaultResumeValues, ExperienceItem, EducationItem } from "@/types/resume";
+import { ResumeFormValues, defaultResumeValues } from "@/types/resume";
 
-// Define Zod schemas that matches our types exactly
 const experienceSchema = z.object({
-  title: z.string().min(1),
-  company: z.string().min(1),
-  period: z.string().min(1),
-  description: z.string().min(1)
-}).required();
+  title: z.string().min(1, "Title is required"),
+  company: z.string().min(1, "Company is required"),
+  period: z.string().min(1, "Period is required"),
+  description: z.string().min(1, "Description is required")
+});
 
 const educationSchema = z.object({
-  degree: z.string().min(1),
-  school: z.string().min(1),
-  year: z.string().min(1)
-}).required();
+  degree: z.string().min(1, "Degree is required"),
+  school: z.string().min(1, "School is required"),
+  year: z.string().min(1, "Year is required")
+});
 
-// Main form schema that matches ResumeFormValues exactly
 const formSchema = z.object({
-  fullName: z.string().min(1),
-  email: z.string().min(1).email(),
-  phone: z.string().min(1),
-  summary: z.string().min(1),
+  fullName: z.string().min(1, "Full name is required"),
+  email: z.string().min(1, "Email is required").email("Invalid email address"),
+  phone: z.string().min(1, "Phone number is required"),
+  summary: z.string().min(1, "Summary is required"),
   experience: z.array(experienceSchema),
   education: z.array(educationSchema),
   skills: z.array(z.string())
-}).required();
+});
 
 const Editor = () => {
   const { templateId } = useParams();
@@ -79,7 +77,6 @@ const Editor = () => {
       setIsGenerating(true);
       toast.info("Generating PDF...");
       
-      // Ensure the preview is fully rendered
       await new Promise(resolve => setTimeout(resolve, 500));
       
       const success = await generatePDF(
@@ -105,13 +102,11 @@ const Editor = () => {
     try {
       const currentValue = form.getValues(field);
   
-      // Safety check for API key
       const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
       if (!API_KEY) {
         throw new Error("API key not configured");
       }
   
-      // Prepare the prompt based on the action
       let prompt = "";
       switch (action) {
         case "generate":
@@ -130,10 +125,8 @@ const Editor = () => {
           prompt = `Improve this resume ${field}: ${currentValue}`;
       }
   
-      // API endpoint
       const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
   
-      // Request payload
       const requestBody = {
         contents: [
           {
@@ -142,7 +135,6 @@ const Editor = () => {
         ],
       };
   
-      // API request
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -158,13 +150,11 @@ const Editor = () => {
   
       const data = await response.json();
   
-      // Extract generated content
       const generatedText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
       if (!generatedText) {
         throw new Error("No content generated");
       }
   
-      // Update form with generated content
       form.setValue(field, generatedText);
       toast.success("Content generated successfully!");
     } catch (error) {

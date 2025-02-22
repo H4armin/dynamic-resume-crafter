@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 import { FileText, Download, Eye, Settings2, FileCode2, Users, Award, BarChart } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -17,45 +16,31 @@ const categories = [
 const templates = [
   {
     id: "template1",
-    name: "Professional Classic",
-    description: "Traditional layout with modern typography",
-    image: "https://cdn.discordapp.com/attachments/1214599475930452049/1214599651684380712/image.png?ex=65fa4c48&is=65e7d748&hm=60ff5937ad0e29a0b9cc7d3e48e2515cd9e56fcf0278b726e86fad9f7a3523fa&",
-    category: "professional"
-  },
-  {
-    id: "template2",
-    name: "Creative Modern",
-    description: "Unique two-column design with bold accents",
-    image: "https://cdn.discordapp.com/attachments/1214599475930452049/1214599709490675732/image.png?ex=65fa4c56&is=65e7d756&hm=f6b8b68b321eca675c6e3804f6997a79560872c32e505c9b89e67c0b80d7fb7f&",
+    name: "Creative Header",
+    description: "Modern layout with circular photo and elegant typography",
+    image: "/lovable-uploads/449e5016-df65-47df-8d7c-ea19d579fb32.png",
     category: "creative"
   },
   {
-    id: "template3",
-    name: "Executive Clean",
-    description: "Sophisticated design for senior professionals",
-    image: "https://cdn.discordapp.com/attachments/1214599475930452049/1214599766214144060/image.png?ex=65fa4c63&is=65e7d763&hm=e506e71a8a2621c315c440def8b2f0e5f371e9f08b61a66af27936e61ec3cae5&",
+    id: "template2",
+    name: "Professional Clean",
+    description: "Clean professional layout with clear sections",
+    image: "/lovable-uploads/881d45df-3691-4b93-8002-dc100239d1e4.png",
     category: "professional"
   },
   {
-    id: "template4",
-    name: "Minimal Impact",
-    description: "Clean design with effective space utilization",
-    image: "https://cdn.discordapp.com/attachments/1214599475930452049/1214599818705166346/image.png?ex=65fa4c70&is=65e7d770&hm=c8389e800addd89e81ba1ca075d72a46f26849737a924a445f3f30d5206e5304&",
-    category: "simple"
-  },
-  {
-    id: "template5",
-    name: "Modern Tech",
-    description: "Contemporary layout for tech professionals",
-    image: "https://cdn.discordapp.com/attachments/1214599475930452049/1214599869846056960/image.png?ex=65fa4c7c&is=65e7d77c&hm=fb24cc95412c9f4c1cedd6d80108b695470520be5196888c5b9d7660756c8645&",
+    id: "template3",
+    name: "Modern Split",
+    description: "Two-column design with sidebar focus",
+    image: "/lovable-uploads/37098c6c-11be-41ef-ac62-49670d910613.png",
     category: "modern"
   },
   {
-    id: "template6",
-    name: "ATS Optimized",
-    description: "Structured layout for ATS compatibility",
-    image: "https://cdn.discordapp.com/attachments/1214599475930452049/1214599911902212196/image.png?ex=65fa4c86&is=65e7d786&hm=022d04ce5383f5403c7aadf895360426d4c49046bec552a9cbbb4b178ef80aaa&",
-    category: "ats"
+    id: "template4",
+    name: "Professional Photo",
+    description: "Traditional layout with professional photo header",
+    image: "/lovable-uploads/cd91647f-7f95-44a3-95e3-81644b7849bc.png",
+    category: "professional"
   }
 ];
 
