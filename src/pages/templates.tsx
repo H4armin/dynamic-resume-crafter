@@ -7,41 +7,55 @@ import { useState } from "react";
 
 const categories = [
   { id: "all", name: "All templates", icon: FileText },
-  { id: "simple", name: "Simple", icon: Settings2 },
+  { id: "professional", name: "Professional", icon: Award },
   { id: "modern", name: "Modern", icon: Users },
   { id: "creative", name: "Creative", icon: FileCode2 },
-  { id: "professional", name: "Professional", icon: Award },
+  { id: "simple", name: "Simple", icon: Settings2 },
   { id: "ats", name: "ATS", icon: BarChart }
 ];
 
 const templates = [
   {
-    id: "basic",
-    name: "Professional Resume",
-    description: "Clean and professional layout for traditional industries",
+    id: "minimal",
+    name: "Minimal Resume",
+    description: "Clean and minimalist design for a professional look",
     image: "/lovable-uploads/5165ab84-9149-467b-9bcb-fc442d1a9be2.png",
     category: "professional"
   },
   {
-    id: "modern",
-    name: "Modern Creative",
-    description: "Contemporary design with a creative touch",
+    id: "stockholm",
+    name: "Stockholm",
+    description: "Modern and creative design with unique layout",
     image: "/lovable-uploads/2ae41880-7206-4676-a698-b48229c0b7d6.png",
     category: "creative"
   },
   {
-    id: "simple",
-    name: "Simple Classic",
-    description: "Elegant design with a focus on experience",
+    id: "berlin",
+    name: "Berlin",
+    description: "Bold and impactful design for creative professionals",
     image: "/lovable-uploads/5165ab84-9149-467b-9bcb-fc442d1a9be2.png",
-    category: "simple"
+    category: "creative"
   },
   {
-    id: "ats-friendly",
-    name: "ATS Optimized",
-    description: "Designed to pass Applicant Tracking Systems",
+    id: "tokyo",
+    name: "Tokyo",
+    description: "Modern minimalist design with Japanese influence",
     image: "/lovable-uploads/2ae41880-7206-4676-a698-b48229c0b7d6.png",
-    category: "ats"
+    category: "modern"
+  },
+  {
+    id: "amsterdam",
+    name: "Amsterdam",
+    description: "Classic European design with modern elements",
+    image: "/lovable-uploads/5165ab84-9149-467b-9bcb-fc442d1a9be2.png",
+    category: "professional"
+  },
+  {
+    id: "sydney",
+    name: "Sydney",
+    description: "Vibrant and fresh design for standing out",
+    image: "/lovable-uploads/2ae41880-7206-4676-a698-b48229c0b7d6.png",
+    category: "modern"
   }
 ];
 
