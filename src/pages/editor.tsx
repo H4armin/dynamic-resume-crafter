@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -22,8 +21,11 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { saveResumeToStorage, loadResumeFromStorage } from "@/utils/storage";
 import { generatePDF } from "@/utils/pdf";
 import { ResumeFormValues, defaultResumeValues } from "@/types/resume";
+import { Template1 } from "@/components/resume-templates/Template1";
+import { Template2 } from "@/components/resume-templates/Template2";
+import { Template3 } from "@/components/resume-templates/Template3";
+import { Template4 } from "@/components/resume-templates/Template4";
 
-// Define the exact schema shape that matches ResumeFormValues
 const experienceSchema = z.object({
   title: z.string().min(1, "Title is required"),
   company: z.string().min(1, "Company is required"),
@@ -47,7 +49,6 @@ const formSchema = z.object({
   skills: z.array(z.string())
 }).required();
 
-// This ensures the schema type matches ResumeFormValues exactly
 type FormSchema = z.infer<typeof formSchema>;
 
 const Editor = () => {
@@ -207,68 +208,20 @@ const Editor = () => {
     </DropdownMenu>
   );
 
-  const ResumePreview = ({ data }: { data: Partial<ResumeFormValues> }) => (
-    <div className="bg-white p-8 rounded-xl shadow-lg">
-      <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">{data.fullName || "Your Name"}</h1>
-        <div className="text-gray-600 space-x-4">
-          <span>{data.email}</span>
-          <span>•</span>
-          <span>{data.phone}</span>
-        </div>
-      </div>
-
-      <div className="mb-8">
-        <h2 className="text-xl font-semibold text-gray-900 mb-3 border-b border-gray-200 pb-2">
-          Professional Summary
-        </h2>
-        <p className="text-gray-700 leading-relaxed">
-          {data.summary || "Add your professional summary..."}
-        </p>
-      </div>
-
-      <div className="mb-8">
-        <h2 className="text-xl font-semibold text-gray-900 mb-3 border-b border-gray-200 pb-2">
-          Experience
-        </h2>
-        {data.experience?.map((exp, index) => (
-          <div key={index} className="mb-4">
-            <h3 className="font-semibold text-gray-800">{exp.title}</h3>
-            <div className="text-gray-600">{exp.company} • {exp.period}</div>
-            <p className="text-gray-700 mt-2">{exp.description}</p>
-          </div>
-        ))}
-      </div>
-
-      <div className="mb-8">
-        <h2 className="text-xl font-semibold text-gray-900 mb-3 border-b border-gray-200 pb-2">
-          Education
-        </h2>
-        {data.education?.map((edu, index) => (
-          <div key={index} className="mb-4">
-            <h3 className="font-semibold text-gray-800">{edu.degree}</h3>
-            <div className="text-gray-600">{edu.school} • {edu.year}</div>
-          </div>
-        ))}
-      </div>
-
-      <div>
-        <h2 className="text-xl font-semibold text-gray-900 mb-3 border-b border-gray-200 pb-2">
-          Skills
-        </h2>
-        <div className="flex flex-wrap gap-2">
-          {data.skills?.map((skill, index) => (
-            <span
-              key={index}
-              className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm"
-            >
-              {skill}
-            </span>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
+  const ResumePreview = ({ data, templateId }: { data: Partial<ResumeFormValues>; templateId?: string }) => {
+    switch (templateId) {
+      case "template1":
+        return <Template1 data={data} />;
+      case "template2":
+        return <Template2 data={data} />;
+      case "template3":
+        return <Template3 data={data} />;
+      case "template4":
+        return <Template4 data={data} />;
+      default:
+        return <Template1 data={data} />;
+    }
+  };
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -383,7 +336,7 @@ const Editor = () => {
 
         <div className={`${isMobile ? 'w-full' : 'w-1/2'} bg-white/5 p-6 overflow-y-auto`}>
           <div id="resume-preview" className="w-full h-full bg-white rounded-lg shadow-lg">
-            <ResumePreview data={form.watch()} />
+            <ResumePreview data={form.watch()} templateId={templateId} />
           </div>
         </div>
       </div>
