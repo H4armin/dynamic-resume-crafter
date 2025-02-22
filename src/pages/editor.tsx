@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -22,28 +23,32 @@ import { saveResumeToStorage, loadResumeFromStorage } from "@/utils/storage";
 import { generatePDF } from "@/utils/pdf";
 import { ResumeFormValues, defaultResumeValues } from "@/types/resume";
 
+// Define the exact schema shape that matches ResumeFormValues
 const experienceSchema = z.object({
   title: z.string().min(1, "Title is required"),
   company: z.string().min(1, "Company is required"),
   period: z.string().min(1, "Period is required"),
   description: z.string().min(1, "Description is required")
-});
+}).required();
 
 const educationSchema = z.object({
   degree: z.string().min(1, "Degree is required"),
   school: z.string().min(1, "School is required"),
   year: z.string().min(1, "Year is required")
-});
+}).required();
 
 const formSchema = z.object({
   fullName: z.string().min(1, "Full name is required"),
   email: z.string().min(1, "Email is required").email("Invalid email address"),
   phone: z.string().min(1, "Phone number is required"),
   summary: z.string().min(1, "Summary is required"),
-  experience: z.array(experienceSchema),
-  education: z.array(educationSchema),
+  experience: z.array(experienceSchema).min(1, "At least one experience entry is required"),
+  education: z.array(educationSchema).min(1, "At least one education entry is required"),
   skills: z.array(z.string())
-});
+}).required();
+
+// This ensures the schema type matches ResumeFormValues exactly
+type FormSchema = z.infer<typeof formSchema>;
 
 const Editor = () => {
   const { templateId } = useParams();
@@ -51,7 +56,7 @@ const Editor = () => {
   const isMobile = useIsMobile();
 
   const form = useForm<ResumeFormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver<FormSchema>(formSchema),
     defaultValues: loadResumeFromStorage() || defaultResumeValues,
     mode: "onChange"
   });
