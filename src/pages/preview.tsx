@@ -25,7 +25,7 @@ const Preview = () => {
   };
 
   return (
-    <div className="min-h-screen w-full max-w-4xl mx-auto p-8">
+    <div className="min-h-screen w-full p-8 bg-gray-50">
       {getTemplateComponent()}
     </div>
   );
