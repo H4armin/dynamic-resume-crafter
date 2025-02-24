@@ -23,20 +23,20 @@ export interface ResumeFormValues {
 }
 
 export const defaultResumeValues: ResumeFormValues = {
-  fullName: "",
-  email: "",
-  phone: "",
-  summary: "",
+  fullName: "John Doe",
+  email: "john.doe@example.com",
+  phone: "+1 234 567 890",
+  summary: "Experienced professional with a track record of success in...",
   experience: [{
-    title: "",
-    company: "",
-    period: "",
-    description: ""
+    title: "Senior Developer",
+    company: "Tech Corp",
+    period: "2020 - Present",
+    description: "Led development teams and implemented key features..."
   }],
   education: [{
-    degree: "",
-    school: "",
-    year: ""
+    degree: "Bachelor of Science in Computer Science",
+    school: "University of Technology",
+    year: "2019"
   }],
-  skills: []
+  skills: ["JavaScript", "React", "TypeScript", "Node.js"]
 };

@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import { FileText, Download, Eye, Settings2, FileCode2, Users, Award, BarChart } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -50,6 +51,10 @@ const Templates = () => {
 
   const handleTemplateSelect = (templateId: string) => {
     navigate(`/editor/${templateId}`);
+  };
+
+  const handlePreview = (templateId: string) => {
+    window.open(`/preview/${templateId}`, '_blank');
   };
 
   const filteredTemplates = selectedCategory === "all" 
@@ -112,7 +117,7 @@ const Templates = () => {
                     <Button
                       variant="outline"
                       className="border-white text-white hover:bg-white/20"
-                      onClick={() => window.open(`/preview/${template.id}`, '_blank')}
+                      onClick={() => handlePreview(template.id)}
                     >
                       <Eye className="w-4 h-4" />
                     </Button>

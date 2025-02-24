@@ -8,6 +8,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Templates from "./pages/templates";
 import Editor from "./pages/editor";
+import Preview from "./pages/preview";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => {
               <Route path="/" element={<Index />} />
               <Route path="/templates" element={<Templates />} />
               <Route path="/editor/:templateId" element={<Editor />} />
+              <Route path="/preview/:templateId" element={<Preview />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
