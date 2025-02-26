@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -27,7 +26,9 @@ import { Template2 } from "@/components/resume-templates/Template2";
 import { Template3 } from "@/components/resume-templates/Template3";
 import { Template4 } from "@/components/resume-templates/Template4";
 
-const formSchema = z.object({
+type FormSchema = z.ZodType<ResumeFormValues>;
+
+const formSchema: FormSchema = z.object({
   fullName: z.string().min(1, "Full name is required"),
   email: z.string().min(1, "Email is required").email("Invalid email address"),
   phone: z.string().min(1, "Phone number is required"),
@@ -49,7 +50,7 @@ const formSchema = z.object({
   ).min(1, "At least one education entry is required"),
   skills: z.array(z.string()),
   profileImage: z.string().optional()
-}) satisfies z.ZodType<ResumeFormValues>;
+});
 
 const Editor = () => {
   const { templateId } = useParams();
