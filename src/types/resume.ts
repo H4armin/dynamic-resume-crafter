@@ -23,20 +23,24 @@ export interface ResumeFormValues {
 }
 
 export const defaultResumeValues: ResumeFormValues = {
-  fullName: "John Doe",
-  email: "john.doe@example.com",
-  phone: "+1 234 567 890",
-  summary: "Experienced professional with a track record of success in...",
-  experience: [{
-    title: "Senior Developer",
-    company: "Tech Corp",
-    period: "2020 - Present",
-    description: "Led development teams and implemented key features..."
-  }],
-  education: [{
-    degree: "Bachelor of Science in Computer Science",
-    school: "University of Technology",
-    year: "2019"
-  }],
-  skills: ["JavaScript", "React", "TypeScript", "Node.js"]
+  fullName: "Kate Bishop",
+  email: "kate.bishop@katedesign.com",
+  phone: "+46 98 765 43 21",
+  summary: "Product Designer with expertise in creating end-to-end experiences for digital products.",
+  experience: [
+    {
+      title: "Product Designer",
+      company: "Finef",
+      period: "Oct 2019 - Present",
+      description: "Designing end-to-end experience for financial products on mobile & web platforms. Working closely with managers, marketing specialists and developers."
+    }
+  ],
+  education: [
+    {
+      degree: "Master's in Human-Computer Interaction",
+      school: "Copenhagen School of Design and Technology",
+      year: "2015 - 2016"
+    }
+  ],
+  skills: ["UI Design", "Product Discovery", "UX Research", "Prototyping", "Figma", "Adobe Illustrator"]
 };
