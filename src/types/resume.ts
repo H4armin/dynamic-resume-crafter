@@ -20,6 +20,7 @@ export interface ResumeFormValues {
   experience: ExperienceItem[];
   education: EducationItem[];
   skills: string[];
+  profileImage?: string;
 }
 
 export const defaultResumeValues: ResumeFormValues = {
@@ -42,5 +43,6 @@ export const defaultResumeValues: ResumeFormValues = {
       year: "2015 - 2016"
     }
   ],
-  skills: ["UI Design", "Product Discovery", "UX Research", "Prototyping", "Figma", "Adobe Illustrator"]
+  skills: ["UI Design", "Product Discovery", "UX Research", "Prototyping", "Figma", "Adobe Illustrator"],
+  profileImage: "/public/lovable-uploads/a779d399-caa5-4873-9919-132035b4ab09.png"
 };

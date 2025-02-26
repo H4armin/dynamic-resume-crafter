@@ -21,7 +21,7 @@ export const Template1 = ({ data }: { data: Partial<ResumeFormValues> }) => (
       <div className="flex-shrink-0">
         <div className="w-32 h-32 rounded-full bg-gray-100 overflow-hidden">
           <img 
-            src="/public/lovable-uploads/a779d399-caa5-4873-9919-132035b4ab09.png" 
+            src={data.profileImage || "/placeholder.svg"}
             alt="Profile" 
             className="w-full h-full object-cover"
           />

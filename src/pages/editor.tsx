@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Save, Download, Wand2, MoreHorizontal, CheckCircle2, Factory, Book } from "lucide-react";
+import { Save, Download, Wand2, MoreHorizontal, CheckCircle2, Factory, Book, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -26,30 +26,25 @@ import { Template2 } from "@/components/resume-templates/Template2";
 import { Template3 } from "@/components/resume-templates/Template3";
 import { Template4 } from "@/components/resume-templates/Template4";
 
-const experienceSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  company: z.string().min(1, "Company is required"),
-  period: z.string().min(1, "Period is required"),
-  description: z.string().min(1, "Description is required")
-}).required();
-
-const educationSchema = z.object({
-  degree: z.string().min(1, "Degree is required"),
-  school: z.string().min(1, "School is required"),
-  year: z.string().min(1, "Year is required")
-}).required();
-
 const formSchema = z.object({
   fullName: z.string().min(1, "Full name is required"),
   email: z.string().min(1, "Email is required").email("Invalid email address"),
   phone: z.string().min(1, "Phone number is required"),
   summary: z.string().min(1, "Summary is required"),
-  experience: z.array(experienceSchema).min(1, "At least one experience entry is required"),
-  education: z.array(educationSchema).min(1, "At least one education entry is required"),
-  skills: z.array(z.string())
-}).required();
-
-type FormSchema = z.infer<typeof formSchema>;
+  experience: z.array(z.object({
+    title: z.string().min(1, "Title is required"),
+    company: z.string().min(1, "Company is required"),
+    period: z.string().min(1, "Period is required"),
+    description: z.string().min(1, "Description is required")
+  })).min(1, "At least one experience entry is required"),
+  education: z.array(z.object({
+    degree: z.string().min(1, "Degree is required"),
+    school: z.string().min(1, "School is required"),
+    year: z.string().min(1, "Year is required")
+  })).min(1, "At least one education entry is required"),
+  skills: z.array(z.string()),
+  profileImage: z.string().optional()
+});
 
 const Editor = () => {
   const { templateId } = useParams();
@@ -57,10 +52,42 @@ const Editor = () => {
   const isMobile = useIsMobile();
 
   const form = useForm<ResumeFormValues>({
-    resolver: zodResolver<FormSchema>(formSchema),
+    resolver: zodResolver(formSchema),
     defaultValues: loadResumeFromStorage() || defaultResumeValues,
     mode: "onChange"
   });
+
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) { // 5MB limit
+      toast.error("Image size should be less than 5MB");
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      // This endpoint is provided by Lovable for file uploads
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (!response.ok) {
+        throw new Error('Upload failed');
+      }
+
+      const { url } = await response.json();
+      form.setValue('profileImage', url);
+      toast.success('Profile image updated successfully');
+    } catch (error) {
+      console.error('Upload error:', error);
+      toast.error('Failed to upload image');
+    }
+  };
 
   const onSubmit = async (data: ResumeFormValues) => {
     try {
@@ -256,46 +283,70 @@ const Editor = () => {
                 <div className="bg-white/5 backdrop-blur-lg rounded-xl p-6 space-y-4 border border-white/10">
                   <h2 className="text-xl font-semibold mb-4">Personal Information</h2>
                   
+                  <div className="flex items-center gap-6 mb-6">
+                    <div className="flex-shrink-0">
+                      <div className="relative w-32 h-32 rounded-full overflow-hidden bg-gray-700">
+                        <img 
+                          src={form.watch('profileImage') || '/placeholder.svg'} 
+                          alt="Profile" 
+                          className="w-full h-full object-cover"
+                        />
+                        <label 
+                          htmlFor="profile-image" 
+                          className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 hover:opacity-100 transition-opacity cursor-pointer"
+                        >
+                          <Upload className="w-6 h-6 text-white" />
+                        </label>
+                        <input
+                          id="profile-image"
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={handleImageUpload}
+                        />
+                      </div>
+                    </div>
+                    <div className="flex-1">
+                      <FormField
+                        control={form.control}
+                        name="fullName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-white">Full Name</FormLabel>
+                            <FormControl>
+                              <Input {...field} className="bg-white/5 border-white/10 text-white" placeholder="John Doe" />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+
                   <FormField
                     control={form.control}
-                    name="fullName"
+                    name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-white">Full Name</FormLabel>
+                        <FormLabel className="text-white">Email</FormLabel>
                         <FormControl>
-                          <Input {...field} className="bg-white/5 border-white/10 text-white" placeholder="John Doe" />
+                          <Input {...field} type="email" className="bg-white/5 border-white/10 text-white" placeholder="john@example.com" />
                         </FormControl>
                       </FormItem>
                     )}
                   />
 
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-white">Email</FormLabel>
-                          <FormControl>
-                            <Input {...field} type="email" className="bg-white/5 border-white/10 text-white" placeholder="john@example.com" />
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="phone"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-white">Phone</FormLabel>
-                          <FormControl>
-                            <Input {...field} className="bg-white/5 border-white/10 text-white" placeholder="+1 (555) 000-0000" />
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+                  <FormField
+                    control={form.control}
+                    name="phone"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-white">Phone</FormLabel>
+                        <FormControl>
+                          <Input {...field} className="bg-white/5 border-white/10 text-white" placeholder="+1 (555) 000-0000" />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
 
                   <FormField
                     control={form.control}
