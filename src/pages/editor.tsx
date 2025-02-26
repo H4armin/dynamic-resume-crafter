@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -31,20 +32,24 @@ const formSchema = z.object({
   email: z.string().min(1, "Email is required").email("Invalid email address"),
   phone: z.string().min(1, "Phone number is required"),
   summary: z.string().min(1, "Summary is required"),
-  experience: z.array(z.object({
-    title: z.string().min(1, "Title is required"),
-    company: z.string().min(1, "Company is required"),
-    period: z.string().min(1, "Period is required"),
-    description: z.string().min(1, "Description is required")
-  })).min(1, "At least one experience entry is required"),
-  education: z.array(z.object({
-    degree: z.string().min(1, "Degree is required"),
-    school: z.string().min(1, "School is required"),
-    year: z.string().min(1, "Year is required")
-  })).min(1, "At least one education entry is required"),
+  experience: z.array(
+    z.object({
+      title: z.string().min(1, "Title is required"),
+      company: z.string().min(1, "Company is required"),
+      period: z.string().min(1, "Period is required"),
+      description: z.string().min(1, "Description is required")
+    })
+  ).min(1, "At least one experience entry is required"),
+  education: z.array(
+    z.object({
+      degree: z.string().min(1, "Degree is required"),
+      school: z.string().min(1, "School is required"),
+      year: z.string().min(1, "Year is required")
+    })
+  ).min(1, "At least one education entry is required"),
   skills: z.array(z.string()),
   profileImage: z.string().optional()
-});
+}) satisfies z.ZodType<ResumeFormValues>;
 
 const Editor = () => {
   const { templateId } = useParams();
