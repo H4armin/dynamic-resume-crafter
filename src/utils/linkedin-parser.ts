@@ -78,7 +78,8 @@ export const parseLinkedInProfile = async (linkedinUrl: string): Promise<Partial
       summary: `Experienced professional with a background in ${username.length > 5 ? 'technology' : 'business'} and ${username.length % 2 === 0 ? 'marketing' : 'design'}. Passionate about creating user-centered solutions and driving innovation.`,
       experience: experienceItems,
       education: educationItems,
-      skills: skillsList
+      skills: skillsList,
+      linkedinUrl
     };
   } catch (error) {
     console.error('LinkedIn parsing error:', error);
