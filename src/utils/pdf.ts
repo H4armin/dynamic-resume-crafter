@@ -34,8 +34,8 @@ export const generatePDF = async (elementId: string, filename: string = "resume.
         // Apply additional styles to the clone for better PDF rendering
         const elementClone = documentClone.getElementById(elementId);
         if (elementClone) {
-          // Ensure all fonts are properly rendered
-          elementClone.style.fontDisplay = 'swap';
+          // Use setAttribute for non-standard CSS properties
+          elementClone.setAttribute("style", elementClone.getAttribute("style") || "" + "font-display: swap;");
           
           // Enhance text rendering
           const allTextElements = elementClone.querySelectorAll('h1, h2, h3, p, span, div');
