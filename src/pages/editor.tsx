@@ -1,7 +1,10 @@
 
 import { useState, useRef } from "react";
 import { useParams } from "react-router-dom";
-import { Save, Download, Wand2, MoreHorizontal, CheckCircle2, Factory, Book, Upload, Plus, Trash2 } from "lucide-react";
+import { 
+  Save, Download, Wand2, MoreHorizontal, CheckCircle2, 
+  Factory, Book, Upload, Plus, Trash2, Link, Loader2 
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -16,7 +19,17 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
+import { 
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { saveResumeToStorage, loadResumeFromStorage } from "@/utils/storage";
 import { generatePDF } from "@/utils/pdf";
 import { ResumeFormValues, defaultResumeValues, ExperienceItem, EducationItem } from "@/types/resume";
@@ -24,6 +37,7 @@ import { Template1 } from "@/components/resume-templates/Template1";
 import { Template2 } from "@/components/resume-templates/Template2";
 import { Template3 } from "@/components/resume-templates/Template3";
 import { Template4 } from "@/components/resume-templates/Template4";
+import { parseLinkedInProfile } from "@/utils/linkedin-parser";
 
 const formSchema = z.object({
   fullName: z.string().min(1, "Full name is required"),
@@ -46,7 +60,8 @@ const formSchema = z.object({
     })
   ).min(1, "At least one education entry is required"),
   skills: z.array(z.string()),
-  profileImage: z.string().optional()
+  profileImage: z.string().optional(),
+  linkedinUrl: z.string().optional()
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -54,6 +69,9 @@ type FormValues = z.infer<typeof formSchema>;
 const Editor = () => {
   const { templateId } = useParams();
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isImportingLinkedIn, setIsImportingLinkedIn] = useState(false);
+  const [linkedinUrl, setLinkedinUrl] = useState("");
+  const [showLinkedinDialog, setShowLinkedinDialog] = useState(false);
   const isMobile = useIsMobile();
   const newSkillRef = useRef<HTMLInputElement>(null);
 
@@ -162,6 +180,34 @@ const Editor = () => {
   const removeSkill = (indexToRemove: number) => {
     const currentSkills = form.getValues("skills");
     form.setValue("skills", currentSkills.filter((_, i) => i !== indexToRemove));
+  };
+
+  const handleImportFromLinkedIn = async () => {
+    if (!linkedinUrl) {
+      toast.error("Please enter a LinkedIn profile URL");
+      return;
+    }
+
+    setIsImportingLinkedIn(true);
+    try {
+      toast.info("Importing data from LinkedIn...");
+      const profileData = await parseLinkedInProfile(linkedinUrl);
+      
+      // Update form with LinkedIn data
+      Object.entries(profileData).forEach(([key, value]) => {
+        if (key !== 'profileImage') { // Don't overwrite profile image
+          form.setValue(key as keyof FormValues, value as any);
+        }
+      });
+      
+      setShowLinkedinDialog(false);
+      toast.success("LinkedIn data imported successfully!");
+    } catch (error) {
+      console.error("LinkedIn import error:", error);
+      toast.error(error instanceof Error ? error.message : "Failed to import LinkedIn data");
+    } finally {
+      setIsImportingLinkedIn(false);
+    }
   };
 
   const generateAIContent = async (field: keyof FormValues, index?: number, subField?: string, action: string = "generate") => {
@@ -324,7 +370,7 @@ const Editor = () => {
     </DropdownMenu>
   );
 
-  const ResumePreview = ({ data, templateId }: { data: Partial<FormValues>; templateId?: string }) => {
+  const ResumePreview = ({ data, templateId }: { data: FormValues; templateId?: string }) => {
     switch (templateId) {
       case "template1":
         return <Template1 data={data} />;
@@ -348,9 +394,18 @@ const Editor = () => {
               <h1 className="text-2xl font-bold">Create Your Resume</h1>
               <div className="flex gap-2">
                 <Button 
+                  onClick={() => setShowLinkedinDialog(true)}
+                  variant="outline"
+                  className="border-white/20 text-white"
+                  disabled={isGenerating || isImportingLinkedIn}
+                >
+                  <Link className="w-4 h-4 mr-2" />
+                  Import LinkedIn
+                </Button>
+                <Button 
                   onClick={form.handleSubmit(onSubmit)}
                   variant="secondary"
-                  disabled={isGenerating}
+                  disabled={isGenerating || isImportingLinkedIn}
                 >
                   <Save className="w-4 h-4 mr-2" />
                   Save
@@ -359,7 +414,7 @@ const Editor = () => {
                   onClick={handleDownloadPDF}
                   variant="outline"
                   className="border-white/20 text-white"
-                  disabled={isGenerating}
+                  disabled={isGenerating || isImportingLinkedIn}
                 >
                   <Download className="w-4 h-4 mr-2" />
                   {isGenerating ? "Generating..." : "Download PDF"}
@@ -721,6 +776,64 @@ const Editor = () => {
           </div>
         </div>
       </div>
+
+      {/* LinkedIn Import Dialog */}
+      <Dialog open={showLinkedinDialog} onOpenChange={setShowLinkedinDialog}>
+        <DialogContent className="bg-black/90 backdrop-blur-lg border-white/10 text-white">
+          <DialogHeader>
+            <DialogTitle>Import from LinkedIn</DialogTitle>
+            <DialogDescription>
+              Enter your LinkedIn profile URL to import your professional details.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="py-4">
+            <FormItem>
+              <FormLabel className="text-white">LinkedIn Profile URL</FormLabel>
+              <div className="flex gap-2">
+                <FormControl>
+                  <Input
+                    value={linkedinUrl}
+                    onChange={(e) => setLinkedinUrl(e.target.value)}
+                    placeholder="https://www.linkedin.com/in/yourprofile/"
+                    className="bg-white/5 border-white/10 text-white"
+                  />
+                </FormControl>
+              </div>
+              <div className="text-xs text-gray-400 mt-1">
+                Example: https://www.linkedin.com/in/username
+              </div>
+            </FormItem>
+          </div>
+
+          <DialogFooter>
+            <Button
+              variant="outline" 
+              onClick={() => setShowLinkedinDialog(false)}
+              className="border-white/20 text-white"
+            >
+              Cancel
+            </Button>
+            <Button 
+              onClick={handleImportFromLinkedIn}
+              disabled={isImportingLinkedIn || !linkedinUrl}
+              variant="secondary"
+            >
+              {isImportingLinkedIn ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Importing...
+                </>
+              ) : (
+                <>
+                  <Link className="w-4 h-4 mr-2" />
+                  Import Data
+                </>
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
