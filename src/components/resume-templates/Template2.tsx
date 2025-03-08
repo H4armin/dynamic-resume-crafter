@@ -4,7 +4,7 @@ import { ResumeFormValues } from "@/types/resume";
 export const Template2 = ({ data }: { data: Partial<ResumeFormValues> }) => (
   <div className="bg-white p-12 rounded-xl shadow-lg max-w-5xl mx-auto">
     <div className="border-l-8 border-blue-600 pl-8 mb-12">
-      <h1 className="text-[40px] font-bold text-gray-900 mb-3">{data.fullName || "John Doe"}</h1>
+      <h1 className="text-[40px] font-black text-gray-900 mb-3 tracking-wide">{data.fullName || "John Doe"}</h1>
       <div className="text-gray-600 text-lg">
         {data.email} <span className="mx-2">•</span> {data.phone}
       </div>

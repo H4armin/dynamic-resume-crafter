@@ -1,0 +1,42 @@
+
+/* Enhanced styling for PDF rendering */
+.pdf-rendering {
+  /* Improve font rendering */
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Template2 improvements for PDF */
+.pdf-rendering h1 {
+  font-weight: 900 !important;
+  letter-spacing: 0.01em !important;
+}
+
+.pdf-rendering h2 {
+  font-weight: 700 !important;
+}
+
+.pdf-rendering .border-blue-600 {
+  border-left-width: 10px !important;
+}
+
+/* Template3 improvements for PDF */
+.pdf-rendering .bg-gray-900 {
+  background-color: #1A1A1A !important;
+  color: white !important;
+}
+
+/* Template1 improvements for PDF */
+.pdf-rendering .text-orange-500 {
+  color: #F97316 !important;
+}
+
+.pdf-rendering .bg-orange-500 {
+  background-color: #F97316 !important;
+}
+
+/* Ensure content is properly sized for PDF */
+.pdf-rendering .max-w-5xl {
+  max-width: 100% !important;
+}

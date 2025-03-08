@@ -1,9 +1,8 @@
-
 import { useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { 
   Save, Download, Wand2, MoreHorizontal, CheckCircle2, 
-  Factory, Book, Upload, Plus, Trash2, Loader2 
+  Factory, Book, Upload, Plus, Trash2, Loader2, Eye 
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,12 +20,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { saveResumeToStorage, loadResumeFromStorage } from "@/utils/storage";
-import { generatePDF } from "@/utils/pdf";
+import { generatePDF, previewResume } from "@/utils/pdf";
 import { ResumeFormValues, defaultResumeValues, ExperienceItem, EducationItem } from "@/types/resume";
 import { Template1 } from "@/components/resume-templates/Template1";
 import { Template2 } from "@/components/resume-templates/Template2";
 import { Template3 } from "@/components/resume-templates/Template3";
 import { Template4 } from "@/components/resume-templates/Template4";
+import "../styles/pdf.css";
 
 const formSchema = z.object({
   fullName: z.string().min(1, "Full name is required"),
@@ -148,6 +148,19 @@ const Editor = () => {
       toast.error("Failed to download resume. Please try again.");
     } finally {
       setIsGenerating(false);
+    }
+  };
+
+  const handlePreviewResume = () => {
+    try {
+      toast.info("Opening preview...");
+      const success = previewResume("resume-preview");
+      if (!success) {
+        throw new Error("Failed to generate preview");
+      }
+    } catch (error) {
+      console.error("Preview error:", error);
+      toast.error("Failed to preview resume. Please try again.");
     }
   };
 
@@ -357,6 +370,15 @@ const Editor = () => {
                 >
                   <Save className="w-4 h-4 mr-2" />
                   Save
+                </Button>
+                <Button 
+                  onClick={handlePreviewResume}
+                  variant="outline"
+                  className="border-white/20 text-white"
+                  disabled={isGenerating}
+                >
+                  <Eye className="w-4 h-4 mr-2" />
+                  Preview
                 </Button>
                 <Button 
                   onClick={handleDownloadPDF}

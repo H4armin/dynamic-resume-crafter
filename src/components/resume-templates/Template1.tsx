@@ -26,6 +26,7 @@ export const Template1 = ({ data }: { data: Partial<ResumeFormValues> }) => (
             src={data.profileImage || "/placeholder.svg"}
             alt="Profile" 
             className="w-full h-full object-cover"
+            crossOrigin="anonymous"
           />
         </div>
       </div>
