@@ -40,3 +40,20 @@
 .pdf-rendering .max-w-5xl {
   max-width: 100% !important;
 }
+
+/* Ensure button text is visible */
+.pdf-rendering button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.5rem !important;
+  opacity: 1 !important;
+}
+
+/* Ensure button labels are visible */
+.pdf-rendering button span,
+.pdf-rendering button svg + span {
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: inline !important;
+}
