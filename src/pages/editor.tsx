@@ -113,7 +113,7 @@ const Editor = () => {
   const onSubmit = async (data: FormValues) => {
     try {
       console.log("Submitting form data:", data);
-      const saved = saveResumeToStorage(data);
+      const saved = saveResumeToStorage(data as ResumeFormValues);
       if (saved) {
         toast.success("Resume saved successfully!");
         console.log("Resume saved to storage");
@@ -327,7 +327,7 @@ const Editor = () => {
     </DropdownMenu>
   );
 
-  const ResumePreview = ({ data, templateId }: { data: FormValues; templateId?: string }) => {
+  const ResumePreview = ({ data, templateId }: { data: ResumeFormValues; templateId?: string }) => {
     switch (templateId) {
       case "template1":
         return <Template1 data={data} />;
@@ -720,7 +720,7 @@ const Editor = () => {
 
         <div className={`${isMobile ? 'w-full' : 'w-1/2'} bg-white/5 p-6 overflow-y-auto`}>
           <div id="resume-preview" className="w-full h-full bg-white rounded-lg shadow-lg">
-            <ResumePreview data={form.watch()} templateId={templateId} />
+            <ResumePreview data={form.watch() as ResumeFormValues} templateId={templateId} />
           </div>
         </div>
       </div>

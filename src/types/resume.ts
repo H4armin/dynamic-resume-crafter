@@ -21,7 +21,6 @@ export interface ResumeFormValues {
   education: EducationItem[];
   skills: string[];
   profileImage?: string;
-  linkedinUrl?: string;
 }
 
 export const defaultResumeValues: ResumeFormValues = {
@@ -80,6 +79,5 @@ export const defaultResumeValues: ResumeFormValues = {
     "Agile/Scrum",
     "Team Leadership"
   ],
-  profileImage: "/public/lovable-uploads/a779d399-caa5-4873-9919-132035b4ab09.png",
-  linkedinUrl: ""
+  profileImage: "/public/lovable-uploads/a779d399-caa5-4873-9919-132035b4ab09.png"
 };
