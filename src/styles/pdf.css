@@ -6,6 +6,37 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-display: swap;
+  max-width: 100% !important;
+  width: 100% !important;
+  /* Force proper rendering */
+  print-color-adjust: exact !important;
+  -webkit-print-color-adjust: exact !important;
+}
+
+/* Template layout fixes */
+.pdf-rendering .grid {
+  display: grid !important;
+}
+
+.pdf-rendering .flex {
+  display: flex !important;
+}
+
+/* Template1 improvements for PDF */
+.pdf-rendering .text-orange-500 {
+  color: #F97316 !important;
+}
+
+.pdf-rendering .bg-orange-500 {
+  background-color: #F97316 !important;
+}
+
+.pdf-rendering .font-serif {
+  font-family: Georgia, serif !important;
+}
+
+.pdf-rendering .rounded-full {
+  border-radius: 9999px !important;
 }
 
 /* Template2 improvements for PDF */
@@ -26,15 +57,6 @@
 .pdf-rendering .bg-gray-900 {
   background-color: #1A1A1A !important;
   color: white !important;
-}
-
-/* Template1 improvements for PDF */
-.pdf-rendering .text-orange-500 {
-  color: #F97316 !important;
-}
-
-.pdf-rendering .bg-orange-500 {
-  background-color: #F97316 !important;
 }
 
 /* Ensure content is properly sized for PDF */
@@ -66,51 +88,87 @@
   color: #FFFFFF !important;
 }
 
-/* Ensure button text is visible */
-.pdf-rendering button {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 0.5rem !important;
-  opacity: 1 !important;
+/* Fix layout issues */
+.pdf-rendering .flex-row,
+.pdf-rendering .sm\\:flex-row {
+  flex-direction: row !important;
 }
 
-/* Ensure button labels are visible */
-.pdf-rendering button span,
-.pdf-rendering button svg + span {
-  opacity: 1 !important;
-  visibility: visible !important;
-  display: inline !important;
+.pdf-rendering .flex-col,
+.pdf-rendering .sm\\:flex-col {
+  flex-direction: column !important;
 }
 
-/* Ensure profile images render properly */
+.pdf-rendering .gap-6,
+.pdf-rendering .sm\\:gap-8,
+.pdf-rendering .lg\\:gap-12 {
+  gap: 1.5rem !important;
+}
+
+/* Fix positioning */
+.pdf-rendering .order-1,
+.pdf-rendering .order-2,
+.pdf-rendering .sm\\:order-1,
+.pdf-rendering .sm\\:order-2 {
+  order: initial !important;
+}
+
+/* Force proper display of images */
 .pdf-rendering img {
   display: block !important;
   visibility: visible !important;
   opacity: 1 !important;
+  max-width: 100% !important;
+  object-fit: cover !important;
 }
 
-/* Fix specific layout issues */
-.pdf-rendering .grid {
-  display: grid !important;
-}
-
-.pdf-rendering .flex {
-  display: flex !important;
-}
-
-/* Force background colors to render in PDF */
+/* Fix background colors */
 .pdf-rendering .bg-white {
   background-color: #FFFFFF !important;
-  -webkit-print-color-adjust: exact !important;
-  print-color-adjust: exact !important;
 }
 
-/* Fix for Template1 specific issues */
-.pdf-rendering .font-serif {
-  font-family: Georgia, serif !important;
+.pdf-rendering .bg-gray-100 {
+  background-color: #F3F4F6 !important;
 }
 
-.pdf-rendering .rounded-full {
-  border-radius: 9999px !important;
+/* Fix for grid layout in Template1 */
+.pdf-rendering .grid-cols-1,
+.pdf-rendering .sm\\:grid-cols-\\[1\\.5fr\\,1fr\\] {
+  grid-template-columns: 1.5fr 1fr !important;
+}
+
+/* Ensure proper spacing */
+.pdf-rendering .p-4,
+.pdf-rendering .sm\\:p-8,
+.pdf-rendering .md\\:p-12,
+.pdf-rendering .lg\\:p-16 {
+  padding: 1rem !important;
+}
+
+/* Fix for email display */
+.pdf-rendering .break-all {
+  word-break: break-all !important;
+  overflow-wrap: break-word !important;
+}
+
+/* Fix for spacing issues */
+.pdf-rendering .mb-4,
+.pdf-rendering .sm\\:mb-6,
+.pdf-rendering .mb-8,
+.pdf-rendering .sm\\:mb-12,
+.pdf-rendering .lg\\:mb-16 {
+  margin-bottom: 1rem !important;
+}
+
+/* Ensure layout matches preview */
+.pdf-rendering .sm\\:grid-cols-\\[1\\.5fr\\,1fr\\] {
+  display: grid !important;
+  grid-template-columns: 1.5fr 1fr !important;
+}
+
+/* Make sure inline elements display properly */
+.pdf-rendering .inline,
+.pdf-rendering .inline-block,
+.pdf-rendering .inline-flex {
+  display: inline-flex !important;
 }

@@ -23,70 +23,113 @@ export const generatePDF = async (elementId: string, filename: string = "resume.
     // Add a temporary class to improve rendering for PDF
     element.classList.add("pdf-rendering");
 
-    // Create a deep clone to modify for PDF rendering
-    const elementClone = element.cloneNode(true) as HTMLElement;
+    // Force any pending layout calculations
+    window.dispatchEvent(new Event('resize'));
     
-    // Force layout calculation by accessing offsetHeight
-    // This is needed to ensure the element is fully rendered
-    element.offsetHeight;
+    // Wait for any potential DOM updates to complete
+    await new Promise(resolve => setTimeout(resolve, 300));
 
+    // Create the canvas with improved settings
     const canvas = await html2canvas(element, {
-      scale: 2, // Higher quality
+      scale: 3, // Higher quality (increased from 2)
       useCORS: true,
+      allowTaint: true,
       logging: false,
       backgroundColor: "#ffffff",
-      windowWidth: element.scrollWidth,
-      windowHeight: element.scrollHeight,
+      windowWidth: 1200, // Use a fixed width for consistency
       onclone: (documentClone) => {
         // Apply additional styles to the clone for better PDF rendering
         const elementClone = documentClone.getElementById(elementId);
         if (elementClone) {
-          // Use setAttribute for non-standard CSS properties
-          elementClone.setAttribute("style", elementClone.getAttribute("style") || "" + "font-display: swap;");
+          // Ensure proper dimensions
+          elementClone.style.width = "100%";
+          elementClone.style.maxWidth = "100%";
+          elementClone.style.margin = "0";
           
-          // Enhance text rendering
-          const allTextElements = elementClone.querySelectorAll('h1, h2, h3, p, span, div');
-          allTextElements.forEach(el => {
-            (el as HTMLElement).style.textRendering = 'optimizeLegibility';
-            (el as HTMLElement).style.opacity = '1';
-            (el as HTMLElement).style.visibility = 'visible';
-          });
+          // Force specific CSS for optimal PDF rendering
+          const styleElement = documentClone.createElement('style');
+          styleElement.innerHTML = `
+            /* Force all elements to be visible */
+            #${elementId} * {
+              visibility: visible !important;
+              opacity: 1 !important;
+              transform: none !important;
+            }
+            
+            /* Force grid and flex layouts */
+            #${elementId} .grid {
+              display: grid !important;
+            }
+            #${elementId} .flex {
+              display: flex !important;
+            }
+            
+            /* Fix specific display issues */
+            #${elementId} .text-orange-500 {
+              color: #F97316 !important;
+            }
+            #${elementId} h1 {
+              font-size: 2.5rem !important;
+            }
+            #${elementId} h2 {
+              font-size: 1.5rem !important;
+            }
+            #${elementId} .font-serif {
+              font-family: Georgia, serif !important;
+            }
+            #${elementId} .rounded-full {
+              border-radius: 9999px !important;
+            }
+            
+            /* Fix layout ordering */
+            #${elementId} .order-1, #${elementId} .order-2,
+            #${elementId} .sm\\:order-1, #${elementId} .sm\\:order-2 {
+              order: initial !important;
+            }
+            
+            /* Fix background colors */
+            #${elementId} .bg-white {
+              background-color: #FFFFFF !important;
+            }
+            #${elementId} .bg-gray-100 {
+              background-color: #F3F4F6 !important;
+            }
+            
+            /* Fix text colors */
+            #${elementId} .text-gray-700, 
+            #${elementId} .text-gray-600, 
+            #${elementId} .text-gray-900 {
+              color: #000000 !important;
+            }
+          `;
+          documentClone.head.appendChild(styleElement);
           
-          // Ensure all images are visible
-          const allImages = elementClone.querySelectorAll('img');
-          allImages.forEach(img => {
-            img.style.display = 'block';
-            img.style.visibility = 'visible';
-            img.style.opacity = '1';
-          });
-          
-          // Make sure grid and flex layouts render properly
-          const gridElements = elementClone.querySelectorAll('.grid');
-          gridElements.forEach(grid => {
-            (grid as HTMLElement).style.display = 'grid';
-          });
-          
-          const flexElements = elementClone.querySelectorAll('.flex');
-          flexElements.forEach(flex => {
-            (flex as HTMLElement).style.display = 'flex';
-          });
-          
-          // Ensure text colors are properly set for PDF rendering
-          const darkTextElements = elementClone.querySelectorAll('.text-gray-700, .text-gray-600, .text-gray-900');
-          darkTextElements.forEach(el => {
-            (el as HTMLElement).style.color = '#000000';
-          });
-          
-          const whiteTextElements = elementClone.querySelectorAll('.text-white');
-          whiteTextElements.forEach(el => {
-            (el as HTMLElement).style.color = '#FFFFFF';
-          });
-          
-          // Ensure backgrounds are properly visible
-          const elementsWithBackground = elementClone.querySelectorAll('[class*="bg-"]');
-          elementsWithBackground.forEach(el => {
-            (el as HTMLElement).style.printColorAdjust = 'exact';
-          });
+          // Apply specific fixes for Template1
+          if (elementClone.querySelector('.font-serif')) {
+            // Ensure proper layout for Template1
+            const container = elementClone.querySelector('.grid');
+            if (container) {
+              container.setAttribute('style', 'display: grid !important; grid-template-columns: 1.5fr 1fr !important; gap: 1rem !important;');
+            }
+            
+            // Fix profile image rendering
+            const profileImg = elementClone.querySelector('.rounded-full img');
+            if (profileImg) {
+              profileImg.setAttribute('style', 'display: block !important; width: 100% !important; height: 100% !important; object-fit: cover !important;');
+            }
+            
+            // Fix header layout
+            const header = elementClone.querySelector('.flex.flex-col.sm\\:flex-row');
+            if (header) {
+              header.setAttribute('style', 'display: flex !important; flex-direction: row !important; gap: 1.5rem !important;');
+              
+              // Fix order of elements
+              const headerItems = header.querySelectorAll('.order-1, .order-2, .sm\\:order-1, .sm\\:order-2');
+              headerItems.forEach((item) => {
+                (item as HTMLElement).style.order = 'initial';
+              });
+            }
+          }
         }
       }
     });
@@ -101,7 +144,8 @@ export const generatePDF = async (elementId: string, filename: string = "resume.
     const pdf = new jsPDF({
       orientation: "portrait",
       unit: "mm",
-      format: "a4"
+      format: "a4",
+      compress: true
     });
 
     // Calculate aspect ratio of the canvas
@@ -113,19 +157,20 @@ export const generatePDF = async (elementId: string, filename: string = "resume.
     
     // If height exceeds A4, adjust both dimensions
     if (imgHeight > pdfHeight) {
-      imgHeight = pdfHeight;
+      imgHeight = pdfHeight - 10; // Add a small margin
       imgWidth = imgHeight * canvasAspectRatio;
     }
     
     // Calculate margins to center the image
     const marginLeft = (pdfWidth - imgWidth) / 2;
+    const marginTop = 5; // Add a small top margin
     
     // Add image to PDF with proper positioning
     pdf.addImage(
       canvas.toDataURL("image/jpeg", 1.0),
       "JPEG",
       marginLeft,
-      0,
+      marginTop,
       imgWidth,
       imgHeight,
       undefined,
