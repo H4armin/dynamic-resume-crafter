@@ -10,125 +10,147 @@ export const generatePDF = async (elementId: string, filename: string = "resume.
       return false;
     }
 
-    // Wait for all images to load
-    const images = element.getElementsByTagName("img");
-    await Promise.all(Array.from(images).map(img => {
-      if (img.complete) return Promise.resolve();
-      return new Promise(resolve => {
-        img.onload = resolve;
-        img.onerror = resolve;
-      });
-    }));
-
-    // Add a temporary class to improve rendering for PDF
-    element.classList.add("pdf-rendering");
-
     // Force any pending layout calculations
     window.dispatchEvent(new Event('resize'));
     
-    // Wait for any potential DOM updates to complete
-    await new Promise(resolve => setTimeout(resolve, 300));
+    // Add PDF rendering class
+    element.classList.add("pdf-rendering");
+    
+    // Wait for all images to load
+    const images = Array.from(element.getElementsByTagName("img"));
+    await Promise.all(
+      images.map(img => {
+        if (img.complete) return Promise.resolve();
+        return new Promise(resolve => {
+          img.onload = resolve;
+          img.onerror = resolve;
+        });
+      })
+    );
+    
+    // Wait for any styles to apply
+    await new Promise(resolve => setTimeout(resolve, 500));
 
-    // Create the canvas with improved settings
+    // Determine which template is being used for specific optimizations
+    const isTemplate2 = element.querySelector(".border-l-8.border-blue-600") !== null;
+    
+    // Create canvas with improved settings
     const canvas = await html2canvas(element, {
-      scale: 3, // Higher quality (increased from 2)
+      scale: 4, // Higher resolution
       useCORS: true,
       allowTaint: true,
       logging: false,
       backgroundColor: "#ffffff",
-      windowWidth: 1200, // Use a fixed width for consistency
+      width: isTemplate2 ? 1200 : undefined, // Fixed width for Template2
+      height: isTemplate2 ? 1698 : undefined, // A4 proportional height at 1200px width
       onclone: (documentClone) => {
-        // Apply additional styles to the clone for better PDF rendering
         const elementClone = documentClone.getElementById(elementId);
         if (elementClone) {
-          // Ensure proper dimensions
-          elementClone.style.width = "100%";
-          elementClone.style.maxWidth = "100%";
-          elementClone.style.margin = "0";
-          
-          // Force specific CSS for optimal PDF rendering
+          // Add extra styling to ensure content renders correctly
           const styleElement = documentClone.createElement('style');
           styleElement.innerHTML = `
-            /* Force all elements to be visible */
+            /* Override colors and visibility */
             #${elementId} * {
               visibility: visible !important;
               opacity: 1 !important;
-              transform: none !important;
             }
             
-            /* Force grid and flex layouts */
-            #${elementId} .grid {
-              display: grid !important;
+            /* Template2 specific fixes */
+            #${elementId} .border-l-8.border-blue-600 {
+              border-left: 8px solid #2563EB !important;
+              padding-left: 2rem !important;
             }
+            
+            #${elementId} h1 {
+              font-size: 40px !important;
+              font-weight: 900 !important;
+              color: #121212 !important;
+            }
+            
+            #${elementId} h2 {
+              font-size: 24px !important;
+              font-weight: 700 !important;
+              color: #2563EB !important;
+            }
+            
+            #${elementId} .text-gray-600 {
+              color: #4B5563 !important;
+            }
+            
+            #${elementId} .text-gray-400 {
+              color: #9CA3AF !important;
+            }
+            
+            #${elementId} .text-gray-700 {
+              color: #374151 !important;
+            }
+            
+            #${elementId} .text-gray-800 {
+              color: #1F2937 !important;
+            }
+            
+            #${elementId} .bg-gray-50 {
+              background-color: #F9FAFB !important;
+              color: #374151 !important;
+              padding: 0.5rem 1rem !important;
+              border-radius: 0.5rem !important;
+              display: inline-block !important;
+            }
+            
+            #${elementId} .grid-cols-2 {
+              display: grid !important;
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+              gap: 3rem !important;
+            }
+            
+            /* Fix spacing issues */
+            #${elementId} .mb-12 {
+              margin-bottom: 3rem !important;
+            }
+            
+            #${elementId} .mb-8 {
+              margin-bottom: 2rem !important;
+            }
+            
+            #${elementId} .mb-6 {
+              margin-bottom: 1.5rem !important;
+            }
+            
+            #${elementId} .mb-4 {
+              margin-bottom: 1rem !important;
+            }
+            
+            #${elementId} .mb-3 {
+              margin-bottom: 0.75rem !important;
+            }
+            
+            /* Fix flex layout */
             #${elementId} .flex {
               display: flex !important;
             }
             
-            /* Fix specific display issues */
-            #${elementId} .text-orange-500 {
-              color: #F97316 !important;
-            }
-            #${elementId} h1 {
-              font-size: 2.5rem !important;
-            }
-            #${elementId} h2 {
-              font-size: 1.5rem !important;
-            }
-            #${elementId} .font-serif {
-              font-family: Georgia, serif !important;
-            }
-            #${elementId} .rounded-full {
-              border-radius: 9999px !important;
+            #${elementId} .flex-wrap {
+              flex-wrap: wrap !important;
             }
             
-            /* Fix layout ordering */
-            #${elementId} .order-1, #${elementId} .order-2,
-            #${elementId} .sm\\:order-1, #${elementId} .sm\\:order-2 {
-              order: initial !important;
-            }
-            
-            /* Fix background colors */
-            #${elementId} .bg-white {
-              background-color: #FFFFFF !important;
-            }
-            #${elementId} .bg-gray-100 {
-              background-color: #F3F4F6 !important;
-            }
-            
-            /* Fix text colors */
-            #${elementId} .text-gray-700, 
-            #${elementId} .text-gray-600, 
-            #${elementId} .text-gray-900 {
-              color: #000000 !important;
+            #${elementId} .gap-2 {
+              gap: 0.5rem !important;
             }
           `;
           documentClone.head.appendChild(styleElement);
           
-          // Apply specific fixes for Template1
-          if (elementClone.querySelector('.font-serif')) {
-            // Ensure proper layout for Template1
-            const container = elementClone.querySelector('.grid');
-            if (container) {
-              container.setAttribute('style', 'display: grid !important; grid-template-columns: 1.5fr 1fr !important; gap: 1rem !important;');
-            }
-            
-            // Fix profile image rendering
-            const profileImg = elementClone.querySelector('.rounded-full img');
-            if (profileImg) {
-              profileImg.setAttribute('style', 'display: block !important; width: 100% !important; height: 100% !important; object-fit: cover !important;');
-            }
-            
-            // Fix header layout
-            const header = elementClone.querySelector('.flex.flex-col.sm\\:flex-row');
-            if (header) {
-              header.setAttribute('style', 'display: flex !important; flex-direction: row !important; gap: 1.5rem !important;');
-              
-              // Fix order of elements
-              const headerItems = header.querySelectorAll('.order-1, .order-2, .sm\\:order-1, .sm\\:order-2');
-              headerItems.forEach((item) => {
-                (item as HTMLElement).style.order = 'initial';
-              });
-            }
+          // Ensure proper dimensions
+          elementClone.style.width = isTemplate2 ? "1200px" : "100%";
+          elementClone.style.maxWidth = "100%";
+          elementClone.style.margin = "0";
+          elementClone.style.padding = isTemplate2 ? "3rem" : "inherit";
+          
+          // Ensure borders are visible
+          const borderElement = elementClone.querySelector(".border-l-8");
+          if (borderElement) {
+            borderElement.setAttribute("style", 
+              "border-left: 8px solid #2563EB !important; padding-left: 2rem !important;"
+            );
           }
         }
       }
@@ -136,47 +158,75 @@ export const generatePDF = async (elementId: string, filename: string = "resume.
 
     // Remove the temporary class
     element.classList.remove("pdf-rendering");
-
-    // A4 dimensions in mm
-    const pdfWidth = 210;
-    const pdfHeight = 297;
-
+    
+    // A4 dimensions in points (72 DPI)
+    const pageWidth = 595.28;
+    const pageHeight = 841.89;
+    
+    // Calculate dimensions while preserving aspect ratio
+    const imgWidth = pageWidth - 40; // Add margins
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    
+    // Create new PDF document
     const pdf = new jsPDF({
-      orientation: "portrait",
-      unit: "mm",
+      unit: "pt",
       format: "a4",
-      compress: true
+      orientation: imgHeight > pageHeight ? "landscape" : "portrait",
     });
-
-    // Calculate aspect ratio of the canvas
-    const canvasAspectRatio = canvas.width / canvas.height;
     
-    // Calculate dimensions to fit A4 while maintaining aspect ratio
-    let imgWidth = pdfWidth;
-    let imgHeight = pdfWidth / canvasAspectRatio;
+    // If the height is greater than the page height, we need multiple pages
+    let position = 20; // Top margin
+    const leftMargin = 20; // Left margin
     
-    // If height exceeds A4, adjust both dimensions
-    if (imgHeight > pdfHeight) {
-      imgHeight = pdfHeight - 10; // Add a small margin
-      imgWidth = imgHeight * canvasAspectRatio;
+    if (imgHeight <= pageHeight - 40) {
+      // Image fits on a single page
+      pdf.addImage(
+        canvas.toDataURL("image/jpeg", 1.0),
+        "JPEG",
+        leftMargin,
+        position,
+        imgWidth,
+        imgHeight,
+        undefined,
+        "FAST"
+      );
+    } else {
+      // Image needs multiple pages
+      let heightLeft = imgHeight;
+      let pageHeight = pdf.internal.pageSize.height - 40; // Page height minus margins
+      
+      // Add first page
+      pdf.addImage(
+        canvas.toDataURL("image/jpeg", 1.0),
+        "JPEG",
+        leftMargin,
+        position,
+        imgWidth,
+        imgHeight,
+        undefined,
+        "FAST"
+      );
+      heightLeft -= pageHeight;
+      
+      // Add subsequent pages if needed
+      while (heightLeft > 0) {
+        position = 20; // Reset position for new page
+        pdf.addPage();
+        pdf.addImage(
+          canvas.toDataURL("image/jpeg", 1.0),
+          "JPEG",
+          leftMargin,
+          position - (pageHeight * (imgHeight - heightLeft)) / imgHeight,
+          imgWidth,
+          imgHeight,
+          undefined,
+          "FAST"
+        );
+        heightLeft -= pageHeight;
+      }
     }
     
-    // Calculate margins to center the image
-    const marginLeft = (pdfWidth - imgWidth) / 2;
-    const marginTop = 5; // Add a small top margin
-    
-    // Add image to PDF with proper positioning
-    pdf.addImage(
-      canvas.toDataURL("image/jpeg", 1.0),
-      "JPEG",
-      marginLeft,
-      marginTop,
-      imgWidth,
-      imgHeight,
-      undefined,
-      'FAST'
-    );
-
+    // Save the PDF
     pdf.save(filename);
     return true;
   } catch (error) {
@@ -185,7 +235,6 @@ export const generatePDF = async (elementId: string, filename: string = "resume.
   }
 };
 
-// Add a function to open a preview modal
 export const previewResume = (elementId: string) => {
   const element = document.getElementById(elementId);
   if (!element) return false;

@@ -39,18 +39,56 @@
   border-radius: 9999px !important;
 }
 
-/* Template2 improvements for PDF */
+/* Template2 improvements for PDF - NEW SPECIFIC FIXES */
 .pdf-rendering h1 {
   font-weight: 900 !important;
   letter-spacing: 0.01em !important;
+  font-size: 40px !important;
+  margin-bottom: 12px !important;
 }
 
 .pdf-rendering h2 {
   font-weight: 700 !important;
+  font-size: 24px !important;
+  color: #2563EB !important; /* blue-600 */
+  margin-bottom: 24px !important;
+}
+
+.pdf-rendering h3 {
+  font-weight: 700 !important;
+  font-size: 18px !important;
+  color: #1F2937 !important; /* gray-800 */
 }
 
 .pdf-rendering .border-blue-600 {
-  border-left-width: 10px !important;
+  border-color: #2563EB !important;
+  border-left-width: 8px !important;
+  padding-left: 32px !important;
+}
+
+.pdf-rendering .grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 48px !important;
+}
+
+.pdf-rendering .bg-gray-50 {
+  background-color: #F9FAFB !important;
+}
+
+.pdf-rendering .text-gray-600 {
+  color: #4B5563 !important;
+}
+
+.pdf-rendering .text-gray-400 {
+  color: #9CA3AF !important;
+}
+
+.pdf-rendering .text-gray-700 {
+  color: #374151 !important;
+}
+
+.pdf-rendering .leading-relaxed {
+  line-height: 1.6 !important;
 }
 
 /* Template3 improvements for PDF */
@@ -131,7 +169,7 @@
   background-color: #F3F4F6 !important;
 }
 
-/* Fix for grid layout in Template1 */
+/* Fix for grid layout */
 .pdf-rendering .grid-cols-1,
 .pdf-rendering .sm\\:grid-cols-\\[1\\.5fr\\,1fr\\] {
   grid-template-columns: 1.5fr 1fr !important;
@@ -145,12 +183,6 @@
   padding: 1rem !important;
 }
 
-/* Fix for email display */
-.pdf-rendering .break-all {
-  word-break: break-all !important;
-  overflow-wrap: break-word !important;
-}
-
 /* Fix for spacing issues */
 .pdf-rendering .mb-4,
 .pdf-rendering .sm\\:mb-6,
@@ -160,15 +192,85 @@
   margin-bottom: 1rem !important;
 }
 
-/* Ensure layout matches preview */
-.pdf-rendering .sm\\:grid-cols-\\[1\\.5fr\\,1fr\\] {
-  display: grid !important;
-  grid-template-columns: 1.5fr 1fr !important;
+/* Template2 specific fixes - additional */
+.pdf-rendering .rounded-xl {
+  border-radius: 0.75rem !important;
 }
 
-/* Make sure inline elements display properly */
-.pdf-rendering .inline,
-.pdf-rendering .inline-block,
-.pdf-rendering .inline-flex {
-  display: inline-flex !important;
+.pdf-rendering .shadow-lg {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+.pdf-rendering .mb-12 {
+  margin-bottom: 3rem !important;
+}
+
+.pdf-rendering .mb-6 {
+  margin-bottom: 1.5rem !important;
+}
+
+.pdf-rendering .mb-3 {
+  margin-bottom: 0.75rem !important;
+}
+
+.pdf-rendering .pl-8 {
+  padding-left: 2rem !important;
+}
+
+.pdf-rendering .p-12 {
+  padding: 3rem !important;
+}
+
+.pdf-rendering .mx-2 {
+  margin-left: 0.5rem !important;
+  margin-right: 0.5rem !important;
+}
+
+.pdf-rendering .text-lg {
+  font-size: 1.125rem !important;
+}
+
+.pdf-rendering .px-4 {
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+}
+
+.pdf-rendering .py-2 {
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+}
+
+.pdf-rendering .rounded-lg {
+  border-radius: 0.5rem !important;
+}
+
+.pdf-rendering .text-sm {
+  font-size: 0.875rem !important;
+}
+
+.pdf-rendering .flex-wrap {
+  flex-wrap: wrap !important;
+}
+
+.pdf-rendering .gap-2 {
+  gap: 0.5rem !important;
+}
+
+/* Fix for skill pills */
+.pdf-rendering .bg-gray-50.text-gray-700 {
+  background-color: #F9FAFB !important;
+  color: #374151 !important;
+  display: inline-block !important;
+}
+
+/* Fix for Template2 border */
+.pdf-rendering .border-l-8 {
+  border-left-width: 8px !important;
+  border-left-style: solid !important;
+  border-left-color: #2563EB !important;
+}
+
+/* Fix text-blue-600 color */
+.pdf-rendering .text-blue-600 {
+  color: #2563EB !important;
 }
