@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 import { FileText, Download, Eye, Settings2, FileCode2, Users, Award, BarChart } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -106,7 +105,7 @@ const Templates = () => {
                   alt={template.name}
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
+                <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
                   <div className="flex gap-2">
                     <Button
                       onClick={() => handleTemplateSelect(template.id)}
@@ -119,7 +118,8 @@ const Templates = () => {
                       className="border-white text-white hover:bg-white/20"
                       onClick={() => handlePreview(template.id)}
                     >
-                      <Eye className="w-4 h-4" />
+                      <Eye className="w-4 h-4 mr-2" />
+                      Preview
                     </Button>
                   </div>
                 </div>
