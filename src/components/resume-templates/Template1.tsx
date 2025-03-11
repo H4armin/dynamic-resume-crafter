@@ -7,16 +7,16 @@ export const Template1 = ({ data }: { data: Partial<ResumeFormValues> }) => (
       <div className="flex-1 order-2 sm:order-1">
         <div className="text-orange-500 font-serif text-base sm:text-lg mb-1">Product Designer</div>
         <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-[52px] leading-tight font-normal text-gray-900 mb-4 sm:mb-6">
-          {data.fullName}
+          {data.fullName || "Your Name"}
         </h1>
         <div className="space-y-2">
           <div className="flex items-center gap-2 text-gray-700 text-sm sm:text-base">
             <div className="w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-orange-500 flex-shrink-0" />
-            <span className="break-all">{data.email}</span>
+            <span className="break-all">{data.email || "your-email@example.com"}</span>
           </div>
           <div className="flex items-center gap-2 text-gray-700 text-sm sm:text-base">
             <div className="w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-orange-500 flex-shrink-0" />
-            <span>{data.phone}</span>
+            <span>{data.phone || "+1 (555) 000-0000"}</span>
           </div>
         </div>
       </div>
@@ -37,13 +37,22 @@ export const Template1 = ({ data }: { data: Partial<ResumeFormValues> }) => (
         <h2 className="font-serif text-xl sm:text-2xl text-orange-500 mb-6 sm:mb-8">Work experience</h2>
         {data.experience?.map((exp, index) => (
           <div key={index} className="mb-6 sm:mb-8">
-            <h3 className="text-lg sm:text-xl font-serif text-gray-900 mb-1">{exp.title}</h3>
+            <h3 className="text-lg sm:text-xl font-serif text-gray-900 mb-1">{exp.title || "Job Title"}</h3>
             <div className="text-gray-600 italic mb-2 sm:mb-4 text-sm sm:text-base">
-              {exp.company}, {exp.period}
+              {exp.company || "Company Name"}, {exp.period || "2020 - Present"}
             </div>
-            <p className="text-gray-700 leading-relaxed text-sm sm:text-base">{exp.description}</p>
+            <p className="text-gray-700 leading-relaxed text-sm sm:text-base">{exp.description || "Job description"}</p>
           </div>
         ))}
+        {(!data.experience || data.experience.length === 0) && (
+          <div className="mb-6 sm:mb-8">
+            <h3 className="text-lg sm:text-xl font-serif text-gray-900 mb-1">Job Title</h3>
+            <div className="text-gray-600 italic mb-2 sm:mb-4 text-sm sm:text-base">
+              Company Name, 2020 - Present
+            </div>
+            <p className="text-gray-700 leading-relaxed text-sm sm:text-base">Job description</p>
+          </div>
+        )}
       </div>
 
       <div className="space-y-8 sm:space-y-12">
@@ -51,11 +60,18 @@ export const Template1 = ({ data }: { data: Partial<ResumeFormValues> }) => (
           <h2 className="font-serif text-xl sm:text-2xl text-orange-500 mb-6 sm:mb-8">Education & Learning</h2>
           {data.education?.map((edu, index) => (
             <div key={index} className="mb-4 sm:mb-6">
-              <h3 className="text-lg sm:text-xl font-serif text-gray-900 mb-1">{edu.degree}</h3>
-              <div className="text-gray-600 italic text-sm sm:text-base">{edu.school}</div>
-              <div className="text-gray-500 text-sm sm:text-base">{edu.year}</div>
+              <h3 className="text-lg sm:text-xl font-serif text-gray-900 mb-1">{edu.degree || "Degree"}</h3>
+              <div className="text-gray-600 italic text-sm sm:text-base">{edu.school || "School Name"}</div>
+              <div className="text-gray-500 text-sm sm:text-base">{edu.year || "2015 - 2019"}</div>
             </div>
           ))}
+          {(!data.education || data.education.length === 0) && (
+            <div className="mb-4 sm:mb-6">
+              <h3 className="text-lg sm:text-xl font-serif text-gray-900 mb-1">Degree</h3>
+              <div className="text-gray-600 italic text-sm sm:text-base">School Name</div>
+              <div className="text-gray-500 text-sm sm:text-base">2015 - 2019</div>
+            </div>
+          )}
         </div>
 
         <div>
@@ -64,6 +80,14 @@ export const Template1 = ({ data }: { data: Partial<ResumeFormValues> }) => (
             {data.skills?.map((skill, index) => (
               <span key={index} className="text-gray-700 text-sm sm:text-base">{skill}</span>
             ))}
+            {(!data.skills || data.skills.length === 0) && (
+              <>
+                <span className="text-gray-700 text-sm sm:text-base">Skill 1</span>
+                <span className="text-gray-700 text-sm sm:text-base">Skill 2</span>
+                <span className="text-gray-700 text-sm sm:text-base">Skill 3</span>
+                <span className="text-gray-700 text-sm sm:text-base">Skill 4</span>
+              </>
+            )}
           </div>
         </div>
       </div>

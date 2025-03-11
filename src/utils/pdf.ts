@@ -23,6 +23,13 @@ export const generatePDF = async (elementId: string, filename: string = "resume.
     // Add a temporary class to improve rendering for PDF
     element.classList.add("pdf-rendering");
 
+    // Create a deep clone to modify for PDF rendering
+    const elementClone = element.cloneNode(true) as HTMLElement;
+    
+    // Force layout calculation by accessing offsetHeight
+    // This is needed to ensure the element is fully rendered
+    element.offsetHeight;
+
     const canvas = await html2canvas(element, {
       scale: 2, // Higher quality
       useCORS: true,
@@ -41,6 +48,44 @@ export const generatePDF = async (elementId: string, filename: string = "resume.
           const allTextElements = elementClone.querySelectorAll('h1, h2, h3, p, span, div');
           allTextElements.forEach(el => {
             (el as HTMLElement).style.textRendering = 'optimizeLegibility';
+            (el as HTMLElement).style.opacity = '1';
+            (el as HTMLElement).style.visibility = 'visible';
+          });
+          
+          // Ensure all images are visible
+          const allImages = elementClone.querySelectorAll('img');
+          allImages.forEach(img => {
+            img.style.display = 'block';
+            img.style.visibility = 'visible';
+            img.style.opacity = '1';
+          });
+          
+          // Make sure grid and flex layouts render properly
+          const gridElements = elementClone.querySelectorAll('.grid');
+          gridElements.forEach(grid => {
+            (grid as HTMLElement).style.display = 'grid';
+          });
+          
+          const flexElements = elementClone.querySelectorAll('.flex');
+          flexElements.forEach(flex => {
+            (flex as HTMLElement).style.display = 'flex';
+          });
+          
+          // Ensure text colors are properly set for PDF rendering
+          const darkTextElements = elementClone.querySelectorAll('.text-gray-700, .text-gray-600, .text-gray-900');
+          darkTextElements.forEach(el => {
+            (el as HTMLElement).style.color = '#000000';
+          });
+          
+          const whiteTextElements = elementClone.querySelectorAll('.text-white');
+          whiteTextElements.forEach(el => {
+            (el as HTMLElement).style.color = '#FFFFFF';
+          });
+          
+          // Ensure backgrounds are properly visible
+          const elementsWithBackground = elementClone.querySelectorAll('[class*="bg-"]');
+          elementsWithBackground.forEach(el => {
+            (el as HTMLElement).style.printColorAdjust = 'exact';
           });
         }
       }
@@ -50,8 +95,8 @@ export const generatePDF = async (elementId: string, filename: string = "resume.
     element.classList.remove("pdf-rendering");
 
     // A4 dimensions in mm
-    const imgWidth = 210;
-    const imgHeight = 297;
+    const pdfWidth = 210;
+    const pdfHeight = 297;
 
     const pdf = new jsPDF({
       orientation: "portrait",
@@ -59,18 +104,30 @@ export const generatePDF = async (elementId: string, filename: string = "resume.
       format: "a4"
     });
 
-    // Calculate the scaling ratio to fit the content to A4
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = pdf.internal.pageSize.getHeight();
+    // Calculate aspect ratio of the canvas
+    const canvasAspectRatio = canvas.width / canvas.height;
     
-    // Add image to PDF maintaining A4 proportions
+    // Calculate dimensions to fit A4 while maintaining aspect ratio
+    let imgWidth = pdfWidth;
+    let imgHeight = pdfWidth / canvasAspectRatio;
+    
+    // If height exceeds A4, adjust both dimensions
+    if (imgHeight > pdfHeight) {
+      imgHeight = pdfHeight;
+      imgWidth = imgHeight * canvasAspectRatio;
+    }
+    
+    // Calculate margins to center the image
+    const marginLeft = (pdfWidth - imgWidth) / 2;
+    
+    // Add image to PDF with proper positioning
     pdf.addImage(
       canvas.toDataURL("image/jpeg", 1.0),
       "JPEG",
+      marginLeft,
       0,
-      0,
-      pdfWidth,
-      pdfHeight,
+      imgWidth,
+      imgHeight,
       undefined,
       'FAST'
     );

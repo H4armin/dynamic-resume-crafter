@@ -5,6 +5,7 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-display: swap;
 }
 
 /* Template2 improvements for PDF */
@@ -39,6 +40,30 @@
 /* Ensure content is properly sized for PDF */
 .pdf-rendering .max-w-5xl {
   max-width: 100% !important;
+  transform: scale(1) !important;
+}
+
+/* Enhanced visibility for specific elements */
+.pdf-rendering h1, 
+.pdf-rendering h2, 
+.pdf-rendering h3, 
+.pdf-rendering p, 
+.pdf-rendering div, 
+.pdf-rendering span {
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: inherit !important;
+}
+
+/* Ensure all text elements have proper color */
+.pdf-rendering .text-gray-700,
+.pdf-rendering .text-gray-600,
+.pdf-rendering .text-gray-900 {
+  color: #000000 !important;
+}
+
+.pdf-rendering .text-white {
+  color: #FFFFFF !important;
 }
 
 /* Ensure button text is visible */
@@ -56,4 +81,36 @@
   opacity: 1 !important;
   visibility: visible !important;
   display: inline !important;
+}
+
+/* Ensure profile images render properly */
+.pdf-rendering img {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Fix specific layout issues */
+.pdf-rendering .grid {
+  display: grid !important;
+}
+
+.pdf-rendering .flex {
+  display: flex !important;
+}
+
+/* Force background colors to render in PDF */
+.pdf-rendering .bg-white {
+  background-color: #FFFFFF !important;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
+
+/* Fix for Template1 specific issues */
+.pdf-rendering .font-serif {
+  font-family: Georgia, serif !important;
+}
+
+.pdf-rendering .rounded-full {
+  border-radius: 9999px !important;
 }
