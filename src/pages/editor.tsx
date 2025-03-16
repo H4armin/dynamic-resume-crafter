@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { 
   Save, Download, Wand2, MoreHorizontal, CheckCircle2, 
-  Factory, Book, Upload, Plus, Trash2, Loader2, Eye 
+  Factory, Book, Upload, Plus, Trash2, Loader2, Eye, Settings
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,6 +19,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { 
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { saveResumeToStorage, loadResumeFromStorage } from "@/utils/storage";
 import { generatePDF, previewResume } from "@/utils/pdf";
 import { ResumeFormValues, defaultResumeValues, ExperienceItem, EducationItem } from "@/types/resume";
@@ -26,6 +31,8 @@ import { Template1 } from "@/components/resume-templates/Template1";
 import { Template2 } from "@/components/resume-templates/Template2";
 import { Template3 } from "@/components/resume-templates/Template3";
 import { Template4 } from "@/components/resume-templates/Template4";
+import CustomizationPanel from "@/components/CustomizationPanel";
+import { CustomizationProvider } from "@/contexts/CustomizationContext";
 import "../styles/pdf.css";
 
 const formSchema = z.object({
@@ -347,183 +354,227 @@ const Editor = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
-      <div className={`flex ${isMobile ? 'flex-col' : 'h-screen'}`}>
-        <div className={`${isMobile ? 'w-full' : 'w-1/2'} overflow-y-auto p-6 border-r border-white/10`}>
-          <div className="max-w-2xl mx-auto">
-            <div className="flex justify-between items-center mb-8">
-              <h1 className="text-2xl font-bold">Create Your Resume</h1>
-              <div className="flex gap-2">
-                <Button 
-                  onClick={form.handleSubmit(onSubmit)}
-                  variant="secondary"
-                  disabled={isGenerating}
-                >
-                  <Save className="w-4 h-4 mr-2" />
-                  Save
-                </Button>
-                <Button 
-                  onClick={handlePreviewResume}
-                  variant="outline"
-                  className="border-white/20 text-white"
-                  disabled={isGenerating}
-                >
-                  <Eye className="w-4 h-4 mr-2" />
-                  Preview
-                </Button>
-                <Button 
-                  onClick={handleDownloadPDF}
-                  variant="outline"
-                  className="border-white/20 text-white"
-                  disabled={isGenerating}
-                >
-                  <Download className="w-4 h-4 mr-2" />
-                  {isGenerating ? "Generating..." : "Download PDF"}
-                </Button>
-              </div>
-            </div>
-
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                {/* Personal Information Section */}
-                <div className="bg-white/5 backdrop-blur-lg rounded-xl p-6 space-y-4 border border-white/10">
-                  <h2 className="text-xl font-semibold mb-4">Personal Information</h2>
-                  
-                  <div className="flex items-center gap-6 mb-6">
-                    <div className="flex-shrink-0">
-                      <div className="relative w-32 h-32 rounded-full overflow-hidden bg-gray-700">
-                        <img 
-                          src={form.watch('profileImage') || '/placeholder.svg'} 
-                          alt="Profile" 
-                          className="w-full h-full object-cover"
-                        />
-                        <label 
-                          htmlFor="profile-image" 
-                          className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 hover:opacity-100 transition-opacity cursor-pointer"
-                        >
-                          <Upload className="w-6 h-6 text-white" />
-                        </label>
-                        <input
-                          id="profile-image"
-                          type="file"
-                          accept="image/*"
-                          className="hidden"
-                          onChange={handleImageUpload}
-                        />
-                      </div>
-                    </div>
-                    <div className="flex-1">
-                      <FormField
-                        control={form.control}
-                        name="fullName"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-white">Full Name</FormLabel>
-                            <FormControl>
-                              <Input {...field} className="bg-white/5 border-white/10 text-white" placeholder="John Doe" />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </div>
-
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-white">Email</FormLabel>
-                        <FormControl>
-                          <Input {...field} type="email" className="bg-white/5 border-white/10 text-white" placeholder="john@example.com" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="phone"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-white">Phone</FormLabel>
-                        <FormControl>
-                          <Input {...field} className="bg-white/5 border-white/10 text-white" placeholder="+1 (555) 000-0000" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="summary"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-white">Professional Summary</FormLabel>
-                        <div className="flex gap-2">
-                          <FormControl>
-                            <Textarea
-                              {...field}
-                              className="bg-white/5 border-white/10 text-white h-32"
-                              placeholder="Write a brief professional summary..."
-                            />
-                          </FormControl>
-                          <AIDropdown field="summary" />
-                        </div>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+    <CustomizationProvider>
+      <div className="min-h-screen bg-black text-white">
+        <div className={`flex ${isMobile ? 'flex-col' : 'h-screen'}`}>
+          <div className={`${isMobile ? 'w-full' : 'w-1/2'} overflow-y-auto p-6 border-r border-white/10`}>
+            <div className="max-w-2xl mx-auto">
+              <div className="flex justify-between items-center mb-8">
+                <h1 className="text-2xl font-bold">Create Your Resume</h1>
+                <div className="flex gap-2">
+                  <Sheet>
+                    <SheetTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="border-white/20 text-white"
+                      >
+                        <Settings className="w-4 h-4 mr-2" />
+                        Customize
+                      </Button>
+                    </SheetTrigger>
+                    <SheetContent className="bg-black/95 border-white/10 w-full sm:max-w-md">
+                      <CustomizationPanel />
+                    </SheetContent>
+                  </Sheet>
+                  <Button 
+                    onClick={form.handleSubmit(onSubmit)}
+                    variant="secondary"
+                    disabled={isGenerating}
+                  >
+                    <Save className="w-4 h-4 mr-2" />
+                    Save
+                  </Button>
+                  <Button 
+                    onClick={handlePreviewResume}
+                    variant="outline"
+                    className="border-white/20 text-white"
+                    disabled={isGenerating}
+                  >
+                    <Eye className="w-4 h-4 mr-2" />
+                    Preview
+                  </Button>
+                  <Button 
+                    onClick={handleDownloadPDF}
+                    variant="outline"
+                    className="border-white/20 text-white"
+                    disabled={isGenerating}
+                  >
+                    <Download className="w-4 h-4 mr-2" />
+                    {isGenerating ? "Generating..." : "Download PDF"}
+                  </Button>
                 </div>
+              </div>
 
-                {/* Experience Section */}
-                <div className="bg-white/5 backdrop-blur-lg rounded-xl p-6 space-y-4 border border-white/10">
-                  <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-xl font-semibold">Experience</h2>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      className="border-white/20 text-white"
-                      onClick={() => appendExperience({ 
-                        title: "", 
-                        company: "", 
-                        period: "", 
-                        description: "" 
-                      })}
-                    >
-                      <Plus className="w-4 h-4 mr-2" />
-                      Add Experience
-                    </Button>
-                  </div>
-                  
-                  {experienceFields.map((field, index) => (
-                    <div key={field.id} className="border border-white/10 rounded-lg p-4 mb-4">
-                      <div className="flex justify-between items-center mb-3">
-                        <h3 className="font-medium">Experience #{index + 1}</h3>
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          className="text-red-400 hover:text-red-300 hover:bg-red-900/20"
-                          onClick={() => removeExperience(index)}
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                  {/* Personal Information Section */}
+                  <div className="bg-white/5 backdrop-blur-lg rounded-xl p-6 space-y-4 border border-white/10">
+                    <h2 className="text-xl font-semibold mb-4">Personal Information</h2>
+                    
+                    <div className="flex items-center gap-6 mb-6">
+                      <div className="flex-shrink-0">
+                        <div className="relative w-32 h-32 rounded-full overflow-hidden bg-gray-700">
+                          <img 
+                            src={form.watch('profileImage') || '/placeholder.svg'} 
+                            alt="Profile" 
+                            className="w-full h-full object-cover"
+                          />
+                          <label 
+                            htmlFor="profile-image" 
+                            className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 hover:opacity-100 transition-opacity cursor-pointer"
+                          >
+                            <Upload className="w-6 h-6 text-white" />
+                          </label>
+                          <input
+                            id="profile-image"
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={handleImageUpload}
+                          />
+                        </div>
                       </div>
-                      
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                      <div className="flex-1">
                         <FormField
                           control={form.control}
-                          name={`experience.${index}.title`}
+                          name="fullName"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel className="text-white">Job Title</FormLabel>
+                              <FormLabel className="text-white">Full Name</FormLabel>
                               <FormControl>
-                                <Input {...field} className="bg-white/5 border-white/10 text-white" placeholder="Product Designer" />
+                                <Input {...field} className="bg-white/5 border-white/10 text-white" placeholder="John Doe" />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </div>
+
+                    <FormField
+                      control={form.control}
+                      name="email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-white">Email</FormLabel>
+                          <FormControl>
+                            <Input {...field} type="email" className="bg-white/5 border-white/10 text-white" placeholder="john@example.com" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="phone"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-white">Phone</FormLabel>
+                          <FormControl>
+                            <Input {...field} className="bg-white/5 border-white/10 text-white" placeholder="+1 (555) 000-0000" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="summary"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-white">Professional Summary</FormLabel>
+                          <div className="flex gap-2">
+                            <FormControl>
+                              <Textarea
+                                {...field}
+                                className="bg-white/5 border-white/10 text-white h-32"
+                                placeholder="Write a brief professional summary..."
+                              />
+                            </FormControl>
+                            <AIDropdown field="summary" />
+                          </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  {/* Experience Section */}
+                  <div className="bg-white/5 backdrop-blur-lg rounded-xl p-6 space-y-4 border border-white/10">
+                    <div className="flex justify-between items-center mb-4">
+                      <h2 className="text-xl font-semibold">Experience</h2>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className="border-white/20 text-white"
+                        onClick={() => appendExperience({ 
+                          title: "", 
+                          company: "", 
+                          period: "", 
+                          description: "" 
+                        })}
+                      >
+                        <Plus className="w-4 h-4 mr-2" />
+                        Add Experience
+                      </Button>
+                    </div>
+                    
+                    {experienceFields.map((field, index) => (
+                      <div key={field.id} className="border border-white/10 rounded-lg p-4 mb-4">
+                        <div className="flex justify-between items-center mb-3">
+                          <h3 className="font-medium">Experience #{index + 1}</h3>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            className="text-red-400 hover:text-red-300 hover:bg-red-900/20"
+                            onClick={() => removeExperience(index)}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                          <FormField
+                            control={form.control}
+                            name={`experience.${index}.title`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="text-white">Job Title</FormLabel>
+                                <FormControl>
+                                  <Input {...field} className="bg-white/5 border-white/10 text-white" placeholder="Product Designer" />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <FormField
+                            control={form.control}
+                            name={`experience.${index}.company`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="text-white">Company</FormLabel>
+                                <FormControl>
+                                  <Input {...field} className="bg-white/5 border-white/10 text-white" placeholder="Acme Inc." />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                        
+                        <FormField
+                          control={form.control}
+                          name={`experience.${index}.period`}
+                          render={({ field }) => (
+                            <FormItem className="mb-4">
+                              <FormLabel className="text-white">Time Period</FormLabel>
+                              <FormControl>
+                                <Input {...field} className="bg-white/5 border-white/10 text-white" placeholder="Jan 2020 - Present" />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -532,212 +583,184 @@ const Editor = () => {
                         
                         <FormField
                           control={form.control}
-                          name={`experience.${index}.company`}
+                          name={`experience.${index}.description`}
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel className="text-white">Company</FormLabel>
+                              <FormLabel className="text-white">Description</FormLabel>
+                              <div className="flex gap-2">
+                                <FormControl>
+                                  <Textarea
+                                    {...field}
+                                    className="bg-white/5 border-white/10 text-white h-24"
+                                    placeholder="Describe your responsibilities and achievements..."
+                                  />
+                                </FormControl>
+                                <AIDropdown field="experience" index={index} subField="description" />
+                              </div>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Education Section */}
+                  <div className="bg-white/5 backdrop-blur-lg rounded-xl p-6 space-y-4 border border-white/10">
+                    <div className="flex justify-between items-center mb-4">
+                      <h2 className="text-xl font-semibold">Education</h2>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className="border-white/20 text-white"
+                        onClick={() => appendEducation({ 
+                          degree: "", 
+                          school: "", 
+                          year: "" 
+                        })}
+                      >
+                        <Plus className="w-4 h-4 mr-2" />
+                        Add Education
+                      </Button>
+                    </div>
+                    
+                    {educationFields.map((field, index) => (
+                      <div key={field.id} className="border border-white/10 rounded-lg p-4 mb-4">
+                        <div className="flex justify-between items-center mb-3">
+                          <h3 className="font-medium">Education #{index + 1}</h3>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            className="text-red-400 hover:text-red-300 hover:bg-red-900/20"
+                            onClick={() => removeEducation(index)}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                        
+                        <FormField
+                          control={form.control}
+                          name={`education.${index}.degree`}
+                          render={({ field }) => (
+                            <FormItem className="mb-4">
+                              <FormLabel className="text-white">Degree</FormLabel>
+                              <div className="flex gap-2">
+                                <FormControl>
+                                  <Input {...field} className="bg-white/5 border-white/10 text-white" placeholder="Bachelor of Science" />
+                                </FormControl>
+                                <AIDropdown field="education" index={index} subField="degree" />
+                              </div>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name={`education.${index}.school`}
+                          render={({ field }) => (
+                            <FormItem className="mb-4">
+                              <FormLabel className="text-white">School</FormLabel>
                               <FormControl>
-                                <Input {...field} className="bg-white/5 border-white/10 text-white" placeholder="Acme Inc." />
+                                <Input {...field} className="bg-white/5 border-white/10 text-white" placeholder="University of Example" />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name={`education.${index}.year`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-white">Year</FormLabel>
+                              <FormControl>
+                                <Input {...field} className="bg-white/5 border-white/10 text-white" placeholder="2015 - 2019" />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
                           )}
                         />
                       </div>
-                      
-                      <FormField
-                        control={form.control}
-                        name={`experience.${index}.period`}
-                        render={({ field }) => (
-                          <FormItem className="mb-4">
-                            <FormLabel className="text-white">Time Period</FormLabel>
-                            <FormControl>
-                              <Input {...field} className="bg-white/5 border-white/10 text-white" placeholder="Jan 2020 - Present" />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <FormField
-                        control={form.control}
-                        name={`experience.${index}.description`}
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-white">Description</FormLabel>
-                            <div className="flex gap-2">
-                              <FormControl>
-                                <Textarea
-                                  {...field}
-                                  className="bg-white/5 border-white/10 text-white h-24"
-                                  placeholder="Describe your responsibilities and achievements..."
-                                />
-                              </FormControl>
-                              <AIDropdown field="experience" index={index} subField="description" />
-                            </div>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  ))}
-                </div>
-
-                {/* Education Section */}
-                <div className="bg-white/5 backdrop-blur-lg rounded-xl p-6 space-y-4 border border-white/10">
-                  <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-xl font-semibold">Education</h2>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      className="border-white/20 text-white"
-                      onClick={() => appendEducation({ 
-                        degree: "", 
-                        school: "", 
-                        year: "" 
-                      })}
-                    >
-                      <Plus className="w-4 h-4 mr-2" />
-                      Add Education
-                    </Button>
+                    ))}
                   </div>
-                  
-                  {educationFields.map((field, index) => (
-                    <div key={field.id} className="border border-white/10 rounded-lg p-4 mb-4">
-                      <div className="flex justify-between items-center mb-3">
-                        <h3 className="font-medium">Education #{index + 1}</h3>
+
+                  {/* Skills Section */}
+                  <div className="bg-white/5 backdrop-blur-lg rounded-xl p-6 space-y-4 border border-white/10">
+                    <div className="flex justify-between items-center mb-4">
+                      <h2 className="text-xl font-semibold">Skills</h2>
+                      <div className="flex gap-2">
                         <Button
                           type="button"
-                          variant="ghost"
+                          variant="outline"
                           size="sm"
-                          className="text-red-400 hover:text-red-300 hover:bg-red-900/20"
-                          onClick={() => removeEducation(index)}
+                          className="border-white/20 text-white"
+                          onClick={() => generateAIContent("skills", undefined, undefined, "generate")}
+                          disabled={isGenerating}
                         >
-                          <Trash2 className="w-4 h-4" />
+                          <Wand2 className="w-4 h-4 mr-2" />
+                          Generate Skills
                         </Button>
                       </div>
-                      
-                      <FormField
-                        control={form.control}
-                        name={`education.${index}.degree`}
-                        render={({ field }) => (
-                          <FormItem className="mb-4">
-                            <FormLabel className="text-white">Degree</FormLabel>
-                            <div className="flex gap-2">
-                              <FormControl>
-                                <Input {...field} className="bg-white/5 border-white/10 text-white" placeholder="Bachelor of Science" />
-                              </FormControl>
-                              <AIDropdown field="education" index={index} subField="degree" />
-                            </div>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <FormField
-                        control={form.control}
-                        name={`education.${index}.school`}
-                        render={({ field }) => (
-                          <FormItem className="mb-4">
-                            <FormLabel className="text-white">School</FormLabel>
-                            <FormControl>
-                              <Input {...field} className="bg-white/5 border-white/10 text-white" placeholder="University of Example" />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <FormField
-                        control={form.control}
-                        name={`education.${index}.year`}
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-white">Year</FormLabel>
-                            <FormControl>
-                              <Input {...field} className="bg-white/5 border-white/10 text-white" placeholder="2015 - 2019" />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
                     </div>
-                  ))}
-                </div>
-
-                {/* Skills Section */}
-                <div className="bg-white/5 backdrop-blur-lg rounded-xl p-6 space-y-4 border border-white/10">
-                  <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-xl font-semibold">Skills</h2>
+                    
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {form.watch("skills").map((skill, index) => (
+                        <div 
+                          key={index} 
+                          className="bg-white/10 text-white px-3 py-1 rounded-full flex items-center gap-1"
+                        >
+                          <span>{skill}</span>
+                          <button 
+                            type="button" 
+                            onClick={() => removeSkill(index)}
+                            className="w-4 h-4 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                    
                     <div className="flex gap-2">
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
+                      <Input 
+                        ref={newSkillRef}
+                        className="bg-white/5 border-white/10 text-white" 
+                        placeholder="Add a skill..."
+                        onKeyPress={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                            addNewSkill();
+                          }
+                        }}
+                      />
+                      <Button 
+                        type="button" 
+                        variant="outline" 
                         className="border-white/20 text-white"
-                        onClick={() => generateAIContent("skills", undefined, undefined, "generate")}
-                        disabled={isGenerating}
+                        onClick={addNewSkill}
                       >
-                        <Wand2 className="w-4 h-4 mr-2" />
-                        Generate Skills
+                        <Plus className="w-4 h-4 mr-2" />
+                        Add
                       </Button>
                     </div>
                   </div>
-                  
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {form.watch("skills").map((skill, index) => (
-                      <div 
-                        key={index} 
-                        className="bg-white/10 text-white px-3 py-1 rounded-full flex items-center gap-1"
-                      >
-                        <span>{skill}</span>
-                        <button 
-                          type="button" 
-                          onClick={() => removeSkill(index)}
-                          className="w-4 h-4 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30"
-                        >
-                          ×
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                  
-                  <div className="flex gap-2">
-                    <Input 
-                      ref={newSkillRef}
-                      className="bg-white/5 border-white/10 text-white" 
-                      placeholder="Add a skill..."
-                      onKeyPress={(e) => {
-                        if (e.key === 'Enter') {
-                          e.preventDefault();
-                          addNewSkill();
-                        }
-                      }}
-                    />
-                    <Button 
-                      type="button" 
-                      variant="outline" 
-                      className="border-white/20 text-white"
-                      onClick={addNewSkill}
-                    >
-                      <Plus className="w-4 h-4 mr-2" />
-                      Add
-                    </Button>
-                  </div>
-                </div>
-              </form>
-            </Form>
+                </form>
+              </Form>
+            </div>
           </div>
-        </div>
 
-        <div className={`${isMobile ? 'w-full' : 'w-1/2'} bg-white p-6 overflow-y-auto`}>
-          <div id="resume-preview" className="w-full h-full">
-            <ResumePreview data={form.watch() as ResumeFormValues} templateId={templateId} />
+          <div className={`${isMobile ? 'w-full' : 'w-1/2'} bg-white p-6 overflow-y-auto`}>
+            <div id="resume-preview" className="w-full h-full">
+              <ResumePreview data={form.watch() as ResumeFormValues} templateId={templateId} />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </CustomizationProvider>
   );
 };
 

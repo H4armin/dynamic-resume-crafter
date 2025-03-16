@@ -1,38 +1,31 @@
 
-import React from "react";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
+import Index from "@/pages/Index";
+import Templates from "@/pages/templates";
+import Editor from "@/pages/editor";
+import Preview from "@/pages/preview";
+import NotFound from "@/pages/NotFound";
+import { CustomizationProvider } from "@/contexts/CustomizationContext";
 import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
-import Templates from "./pages/templates";
-import Editor from "./pages/editor";
-import Preview from "./pages/preview";
-import NotFound from "./pages/NotFound";
+import { Toaster as SonnerToaster } from "sonner";
+import "./App.css";
 
-const queryClient = new QueryClient();
-
-const App = () => {
+function App() {
   return (
-    <React.StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/templates" element={<Templates />} />
-              <Route path="/editor/:templateId" element={<Editor />} />
-              <Route path="/preview/:templateId" element={<Preview />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
-      </QueryClientProvider>
-    </React.StrictMode>
+    <CustomizationProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/templates" element={<Templates />} />
+          <Route path="/editor/:templateId" element={<Editor />} />
+          <Route path="/preview/:templateId" element={<Preview />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+      <Toaster />
+      <SonnerToaster position="top-right" />
+    </CustomizationProvider>
   );
-};
+}
 
 export default App;
