@@ -1,7 +1,9 @@
+
 import { ResumeFormValues } from "@/types/resume";
 
 const ResumePreview = ({ data }: { data: Partial<ResumeFormValues> }) => (
   <div id="resume-preview" className="bg-white p-8 rounded-xl shadow-lg">
+    {/* This component is being replaced by direct template rendering in the editor */}
     <div className="text-center mb-8">
       <h1 className="text-3xl font-bold text-gray-900 mb-2">{data.fullName || "Your Name"}</h1>
       <div className="text-gray-600 space-x-4">
