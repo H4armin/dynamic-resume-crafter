@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import { FileText, Download, Eye, Settings2, FileCode2, Users, Award, BarChart } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -52,8 +53,9 @@ const Templates = () => {
     navigate(`/editor/${templateId}`);
   };
 
-  const handlePreview = (templateId: string) => {
-    window.open(`/preview/${templateId}`, '_blank');
+  const handlePreview = (templateId: string, e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent triggering the parent div's click
+    navigate(`/preview/${templateId}`);
   };
 
   const filteredTemplates = selectedCategory === "all" 
@@ -97,7 +99,8 @@ const Templates = () => {
               key={template.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white/5 backdrop-blur-lg rounded-xl overflow-hidden border border-white/10 hover:border-white/20 transition-all"
+              className="bg-white/5 backdrop-blur-lg rounded-xl overflow-hidden border border-white/10 hover:border-white/20 transition-all cursor-pointer"
+              onClick={() => handleTemplateSelect(template.id)}
             >
               <div className="relative group aspect-[210/297]">
                 <img
@@ -108,7 +111,10 @@ const Templates = () => {
                 <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
                   <div className="flex gap-2">
                     <Button
-                      onClick={() => handleTemplateSelect(template.id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleTemplateSelect(template.id);
+                      }}
                       className="bg-white text-black hover:bg-gray-100"
                     >
                       Use Template
@@ -116,7 +122,7 @@ const Templates = () => {
                     <Button
                       variant="outline"
                       className="border-white text-white hover:bg-white/20"
-                      onClick={() => handlePreview(template.id)}
+                      onClick={(e) => handlePreview(template.id, e)}
                     >
                       <Eye className="w-4 h-4 mr-2" />
                       Preview
