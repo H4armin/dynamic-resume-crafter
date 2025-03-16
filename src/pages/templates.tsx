@@ -5,6 +5,12 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
+// Import template images
+import template1Image from "@/assets/templates/template1.png";
+import template2Image from "@/assets/templates/template2.png";
+import template3Image from "@/assets/templates/template3.png";
+import template4Image from "@/assets/templates/template4.png";
+
 const categories = [
   { id: "all", name: "All templates", icon: FileText },
   { id: "professional", name: "Professional", icon: Award },
@@ -19,28 +25,28 @@ const templates = [
     id: "template1",
     name: "Creative Header",
     description: "Modern layout with circular photo and elegant typography",
-    image: "/lovable-uploads/449e5016-df65-47df-8d7c-ea19d579fb32.png",
+    image: template1Image,
     category: "creative"
   },
   {
     id: "template2",
     name: "Professional Clean",
     description: "Clean professional layout with clear sections",
-    image: "/lovable-uploads/881d45df-3691-4b93-8002-dc100239d1e4.png",
+    image: template2Image,
     category: "professional"
   },
   {
     id: "template3",
     name: "Modern Split",
     description: "Two-column design with sidebar focus",
-    image: "/lovable-uploads/37098c6c-11be-41ef-ac62-49670d910613.png",
+    image: template3Image,
     category: "modern"
   },
   {
     id: "template4",
     name: "Professional Photo",
     description: "Traditional layout with professional photo header",
-    image: "/lovable-uploads/cd91647f-7f95-44a3-95e3-81644b7849bc.png",
+    image: template4Image,
     category: "professional"
   }
 ];

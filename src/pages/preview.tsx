@@ -3,6 +3,12 @@ import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+// Import template images
+import template1Image from "@/assets/templates/template1.png";
+import template2Image from "@/assets/templates/template2.png";
+import template3Image from "@/assets/templates/template3.png";
+import template4Image from "@/assets/templates/template4.png";
+
 const Preview = () => {
   const { templateId } = useParams();
   const navigate = useNavigate();
@@ -11,15 +17,15 @@ const Preview = () => {
   const getTemplateImage = () => {
     switch (templateId) {
       case "template1":
-        return "/lovable-uploads/449e5016-df65-47df-8d7c-ea19d579fb32.png";
+        return template1Image;
       case "template2":
-        return "/lovable-uploads/881d45df-3691-4b93-8002-dc100239d1e4.png";
+        return template2Image;
       case "template3":
-        return "/lovable-uploads/37098c6c-11be-41ef-ac62-49670d910613.png";
+        return template3Image;
       case "template4":
-        return "/lovable-uploads/cd91647f-7f95-44a3-95e3-81644b7849bc.png";
+        return template4Image;
       default:
-        return "/lovable-uploads/449e5016-df65-47df-8d7c-ea19d579fb32.png";
+        return template1Image;
     }
   };
 
