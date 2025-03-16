@@ -88,22 +88,19 @@ const Editor = () => {
     }
 
     try {
-      const formData = new FormData();
-      formData.append('file', file);
+      const reader = new FileReader();
+      
+      reader.onload = (e) => {
+        const base64String = e.target?.result as string;
+        form.setValue('profileImage', base64String);
+        toast.success('Profile image updated successfully');
+      };
+      
+      reader.onerror = () => {
+        throw new Error('Failed to read file');
+      };
 
-      // This endpoint is provided by Lovable for file uploads
-      const response = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData
-      });
-
-      if (!response.ok) {
-        throw new Error('Upload failed');
-      }
-
-      const { url } = await response.json();
-      form.setValue('profileImage', url);
-      toast.success('Profile image updated successfully');
+      reader.readAsDataURL(file);
     } catch (error) {
       console.error('Upload error:', error);
       toast.error('Failed to upload image');
@@ -183,11 +180,9 @@ const Editor = () => {
   const generateAIContent = async (field: keyof FormValues, index?: number, subField?: string, action: string = "generate") => {
     setIsGenerating(true);
     try {
-      // Determine what content to generate based on field and index
       let currentValue = "";
       let promptContext = "";
       
-      // Handle nested fields like experience[0].description
       if (index !== undefined && subField) {
         if (field === "experience") {
           const expItem = form.getValues("experience")[index];
@@ -202,7 +197,6 @@ const Editor = () => {
         currentValue = form.getValues(field as any);
       }
 
-      // Create different prompts based on field and action
       let prompt = "";
       switch (action) {
         case "generate":
@@ -229,7 +223,6 @@ const Editor = () => {
           prompt = `Improve this resume ${field}${subField ? '.' + subField : ''}: ${currentValue}. ${promptContext}`;
       }
 
-      // This API key would typically be provided in the environment
       const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
       if (!API_KEY) {
         throw new Error("API key not configured. Please set VITE_GEMINI_API_KEY in your environment variables.");
@@ -258,7 +251,6 @@ const Editor = () => {
         throw new Error("No content generated");
       }
 
-      // Set the generated content back to the form
       if (index !== undefined && subField) {
         if (field === "experience") {
           const currentExperiences = [...form.getValues("experience")];
@@ -276,7 +268,6 @@ const Editor = () => {
           form.setValue("education", currentEducation);
         }
       } else if (field === "skills" && action === "generate") {
-        // Parse comma-separated skills
         const skillList = generatedText
           .split(",")
           .map(skill => skill.trim())
