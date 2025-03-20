@@ -131,7 +131,7 @@ const ResumePreview = ({ data }: { data: Partial<ResumeFormValues> }) => {
   }
 
   return (
-    <div id="resume-preview" className="bg-white p-8 rounded-xl shadow-lg" style={{ backgroundColor: colors.background }}>
+    <div id="resume-preview" className="bg-white p-8 rounded-xl shadow-lg w-full max-w-5xl mx-auto" style={{ backgroundColor: colors.background }}>
       <div className="text-center mb-8">
         <h1 className={`${styles.heading} font-bold text-gray-900 mb-2`} style={{ color: colors.text }}>
           {data.fullName || "Your Name"}

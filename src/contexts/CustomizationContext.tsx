@@ -20,7 +20,7 @@ type ThemeColors = {
 
 type CustomizationContextType = {
   colors: ThemeColors;
-  setColors: (colors: ThemeColors) => void;
+  setColors: (colors: ThemeColors | ((prev: ThemeColors) => ThemeColors)) => void;
   fontSize: FontSize;
   setFontSize: (size: FontSize) => void;
   spacing: Spacing;

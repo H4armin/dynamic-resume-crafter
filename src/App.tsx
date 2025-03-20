@@ -13,17 +13,19 @@ import "./App.css";
 function App() {
   return (
     <CustomizationProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/templates" element={<Templates />} />
-          <Route path="/editor/:templateId" element={<Editor />} />
-          <Route path="/preview/:templateId" element={<Preview />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-      <Toaster />
-      <SonnerToaster position="top-right" />
+      <div className="min-h-screen w-full overflow-hidden">
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/templates" element={<Templates />} />
+            <Route path="/editor/:templateId" element={<Editor />} />
+            <Route path="/preview/:templateId" element={<Preview />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+        <Toaster />
+        <SonnerToaster position="top-right" />
+      </div>
     </CustomizationProvider>
   );
 }
