@@ -9,6 +9,7 @@ import { CustomizationProvider } from "@/contexts/CustomizationContext";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as SonnerToaster } from "sonner";
 import "./App.css";
+import "./styles/pdf.css"; // Import PDF styles globally
 
 function App() {
   return (

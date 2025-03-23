@@ -1,19 +1,23 @@
 
-/* Enhanced styling for PDF rendering */
+/* Global PDF rendering styles */
 .pdf-rendering {
   /* Improve font rendering */
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-display: swap;
+  
+  /* Force proper layout dimensions */
   max-width: 100% !important;
   width: 100% !important;
+  
   /* Force proper rendering */
   print-color-adjust: exact !important;
   -webkit-print-color-adjust: exact !important;
 }
 
-/* Template layout fixes */
+/* ===== Layout and display fixes ===== */
+/* Force major layout elements to display correctly */
 .pdf-rendering .grid {
   display: grid !important;
 }
@@ -22,6 +26,183 @@
   display: flex !important;
 }
 
+.pdf-rendering .flex-row,
+.pdf-rendering .sm\\:flex-row {
+  flex-direction: row !important;
+}
+
+.pdf-rendering .flex-col,
+.pdf-rendering .sm\\:flex-col {
+  flex-direction: column !important;
+}
+
+.pdf-rendering .flex-wrap {
+  flex-wrap: wrap !important;
+}
+
+/* ===== Font and color fixes ===== */
+/* Ensure all text elements have proper color and visibility */
+.pdf-rendering h1, 
+.pdf-rendering h2, 
+.pdf-rendering h3, 
+.pdf-rendering p, 
+.pdf-rendering div, 
+.pdf-rendering span {
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: inherit !important;
+}
+
+/* ===== Template-agnostic color fixes ===== */
+.pdf-rendering .text-white {
+  color: #FFFFFF !important;
+}
+
+.pdf-rendering .text-gray-400 {
+  color: #9CA3AF !important;
+}
+
+.pdf-rendering .text-gray-600 {
+  color: #4B5563 !important;
+}
+
+.pdf-rendering .text-gray-700 {
+  color: #374151 !important;
+}
+
+.pdf-rendering .text-gray-800 {
+  color: #1F2937 !important;
+}
+
+.pdf-rendering .text-gray-900 {
+  color: #111827 !important;
+}
+
+/* ===== Background color fixes ===== */
+.pdf-rendering .bg-white {
+  background-color: #FFFFFF !important;
+}
+
+.pdf-rendering .bg-gray-50 {
+  background-color: #F9FAFB !important;
+}
+
+.pdf-rendering .bg-gray-100 {
+  background-color: #F3F4F6 !important;
+}
+
+.pdf-rendering .bg-gray-900 {
+  background-color: #111827 !important;
+}
+
+/* ===== Spacing and layout fixes ===== */
+/* Fix spacing classes - applying the default Tailwind values */
+.pdf-rendering .gap-2 {
+  gap: 0.5rem !important;
+}
+
+.pdf-rendering .gap-4 {
+  gap: 1rem !important;
+}
+
+.pdf-rendering .gap-6 {
+  gap: 1.5rem !important;
+}
+
+.pdf-rendering .gap-8 {
+  gap: 2rem !important;
+}
+
+.pdf-rendering .gap-12 {
+  gap: 3rem !important;
+}
+
+/* ===== Margin fixes ===== */
+.pdf-rendering .mb-2 {
+  margin-bottom: 0.5rem !important;
+}
+
+.pdf-rendering .mb-3 {
+  margin-bottom: 0.75rem !important;
+}
+
+.pdf-rendering .mb-4 {
+  margin-bottom: 1rem !important;
+}
+
+.pdf-rendering .mb-6 {
+  margin-bottom: 1.5rem !important;
+}
+
+.pdf-rendering .mb-8 {
+  margin-bottom: 2rem !important;
+}
+
+.pdf-rendering .mb-12 {
+  margin-bottom: 3rem !important;
+}
+
+/* ===== Padding fixes ===== */
+.pdf-rendering .p-4 {
+  padding: 1rem !important;
+}
+
+.pdf-rendering .p-8 {
+  padding: 2rem !important;
+}
+
+.pdf-rendering .p-12 {
+  padding: 3rem !important;
+}
+
+.pdf-rendering .px-3 {
+  padding-left: 0.75rem !important;
+  padding-right: 0.75rem !important;
+}
+
+.pdf-rendering .px-4 {
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+}
+
+.pdf-rendering .py-1 {
+  padding-top: 0.25rem !important;
+  padding-bottom: 0.25rem !important;
+}
+
+.pdf-rendering .py-2 {
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+}
+
+.pdf-rendering .pl-8 {
+  padding-left: 2rem !important;
+}
+
+/* ===== Border fixes ===== */
+.pdf-rendering .rounded-full {
+  border-radius: 9999px !important;
+}
+
+.pdf-rendering .rounded-lg {
+  border-radius: 0.5rem !important;
+}
+
+.pdf-rendering .rounded-xl {
+  border-radius: 0.75rem !important;
+}
+
+.pdf-rendering .border-b {
+  border-bottom-width: 1px !important;
+  border-bottom-style: solid !important;
+}
+
+.pdf-rendering .border-b-2 {
+  border-bottom-width: 2px !important;
+  border-bottom-style: solid !important;
+}
+
+/* ===== Template-specific fixes ===== */
 /* Template1 improvements for PDF */
 .pdf-rendering .text-orange-500 {
   color: #F97316 !important;
@@ -35,242 +216,97 @@
   font-family: Georgia, serif !important;
 }
 
-.pdf-rendering .rounded-full {
-  border-radius: 9999px !important;
-}
-
-/* Template2 improvements for PDF - NEW SPECIFIC FIXES */
-.pdf-rendering h1 {
-  font-weight: 900 !important;
-  letter-spacing: 0.01em !important;
-  font-size: 40px !important;
-  margin-bottom: 12px !important;
-}
-
-.pdf-rendering h2 {
-  font-weight: 700 !important;
-  font-size: 24px !important;
-  color: #2563EB !important; /* blue-600 */
-  margin-bottom: 24px !important;
-}
-
-.pdf-rendering h3 {
-  font-weight: 700 !important;
-  font-size: 18px !important;
-  color: #1F2937 !important; /* gray-800 */
+/* Template2 specific fixes */
+.pdf-rendering .border-l-8 {
+  border-left-width: 8px !important;
+  border-left-style: solid !important;
 }
 
 .pdf-rendering .border-blue-600 {
   border-color: #2563EB !important;
-  border-left-width: 8px !important;
-  padding-left: 32px !important;
 }
 
+.pdf-rendering .text-blue-600 {
+  color: #2563EB !important;
+}
+
+/* Fix for grid layout in Template2 */
 .pdf-rendering .grid-cols-2 {
   grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  gap: 48px !important;
+  gap: 3rem !important;
 }
 
-.pdf-rendering .bg-gray-50 {
-  background-color: #F9FAFB !important;
+/* Template3 specific fixes */
+.pdf-rendering .grid-cols-\[1fr\,2\.5fr\] {
+  grid-template-columns: 1fr 2.5fr !important;
 }
 
-.pdf-rendering .text-gray-600 {
-  color: #4B5563 !important;
+/* Template4 specific fixes */
+.pdf-rendering .grid-cols-\[2\.5fr\,1fr\] {
+  grid-template-columns: 2.5fr 1fr !important;
 }
 
-.pdf-rendering .text-gray-400 {
-  color: #9CA3AF !important;
+/* ===== Font size fixes ===== */
+.pdf-rendering .text-sm {
+  font-size: 0.875rem !important;
 }
 
-.pdf-rendering .text-gray-700 {
-  color: #374151 !important;
-}
-
-.pdf-rendering .leading-relaxed {
-  line-height: 1.6 !important;
-}
-
-/* Template3 improvements for PDF */
-.pdf-rendering .bg-gray-900 {
-  background-color: #1A1A1A !important;
-  color: white !important;
-}
-
-/* Ensure content is properly sized for PDF */
-.pdf-rendering .max-w-5xl {
-  max-width: 100% !important;
-  transform: scale(1) !important;
-}
-
-/* Enhanced visibility for specific elements */
-.pdf-rendering h1, 
-.pdf-rendering h2, 
-.pdf-rendering h3, 
-.pdf-rendering p, 
-.pdf-rendering div, 
-.pdf-rendering span {
-  opacity: 1 !important;
-  visibility: visible !important;
-  display: inherit !important;
-}
-
-/* Ensure all text elements have proper color */
-.pdf-rendering .text-gray-700,
-.pdf-rendering .text-gray-600,
-.pdf-rendering .text-gray-900 {
-  color: #000000 !important;
-}
-
-.pdf-rendering .text-white {
-  color: #FFFFFF !important;
-}
-
-/* Fix layout issues */
-.pdf-rendering .flex-row,
-.pdf-rendering .sm\\:flex-row {
-  flex-direction: row !important;
-}
-
-.pdf-rendering .flex-col,
-.pdf-rendering .sm\\:flex-col {
-  flex-direction: column !important;
-}
-
-.pdf-rendering .gap-6,
-.pdf-rendering .sm\\:gap-8,
-.pdf-rendering .lg\\:gap-12 {
-  gap: 1.5rem !important;
-}
-
-/* Fix positioning */
-.pdf-rendering .order-1,
-.pdf-rendering .order-2,
-.pdf-rendering .sm\\:order-1,
-.pdf-rendering .sm\\:order-2 {
-  order: initial !important;
-}
-
-/* Force proper display of images */
-.pdf-rendering img {
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  max-width: 100% !important;
-  object-fit: cover !important;
-}
-
-/* Fix background colors */
-.pdf-rendering .bg-white {
-  background-color: #FFFFFF !important;
-}
-
-.pdf-rendering .bg-gray-100 {
-  background-color: #F3F4F6 !important;
-}
-
-/* Fix for grid layout */
-.pdf-rendering .grid-cols-1,
-.pdf-rendering .sm\\:grid-cols-\\[1\\.5fr\\,1fr\\] {
-  grid-template-columns: 1.5fr 1fr !important;
-}
-
-/* Ensure proper spacing */
-.pdf-rendering .p-4,
-.pdf-rendering .sm\\:p-8,
-.pdf-rendering .md\\:p-12,
-.pdf-rendering .lg\\:p-16 {
-  padding: 1rem !important;
-}
-
-/* Fix for spacing issues */
-.pdf-rendering .mb-4,
-.pdf-rendering .sm\\:mb-6,
-.pdf-rendering .mb-8,
-.pdf-rendering .sm\\:mb-12,
-.pdf-rendering .lg\\:mb-16 {
-  margin-bottom: 1rem !important;
-}
-
-/* Template2 specific fixes - additional */
-.pdf-rendering .rounded-xl {
-  border-radius: 0.75rem !important;
-}
-
-.pdf-rendering .shadow-lg {
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
-}
-
-.pdf-rendering .mb-12 {
-  margin-bottom: 3rem !important;
-}
-
-.pdf-rendering .mb-6 {
-  margin-bottom: 1.5rem !important;
-}
-
-.pdf-rendering .mb-3 {
-  margin-bottom: 0.75rem !important;
-}
-
-.pdf-rendering .pl-8 {
-  padding-left: 2rem !important;
-}
-
-.pdf-rendering .p-12 {
-  padding: 3rem !important;
-}
-
-.pdf-rendering .mx-2 {
-  margin-left: 0.5rem !important;
-  margin-right: 0.5rem !important;
+.pdf-rendering .text-base {
+  font-size: 1rem !important;
 }
 
 .pdf-rendering .text-lg {
   font-size: 1.125rem !important;
 }
 
-.pdf-rendering .px-4 {
-  padding-left: 1rem !important;
-  padding-right: 1rem !important;
+.pdf-rendering .text-xl {
+  font-size: 1.25rem !important;
 }
 
-.pdf-rendering .py-2 {
-  padding-top: 0.5rem !important;
-  padding-bottom: 0.5rem !important;
+.pdf-rendering .text-2xl {
+  font-size: 1.5rem !important;
 }
 
-.pdf-rendering .rounded-lg {
-  border-radius: 0.5rem !important;
+.pdf-rendering .text-4xl {
+  font-size: 2.25rem !important;
 }
 
-.pdf-rendering .text-sm {
-  font-size: 0.875rem !important;
+.pdf-rendering .text-\[40px\] {
+  font-size: 40px !important;
 }
 
-.pdf-rendering .flex-wrap {
-  flex-wrap: wrap !important;
+/* ===== Font weight fixes ===== */
+.pdf-rendering .font-bold {
+  font-weight: 700 !important;
 }
 
-.pdf-rendering .gap-2 {
-  gap: 0.5rem !important;
+.pdf-rendering .font-semibold {
+  font-weight: 600 !important;
 }
 
-/* Fix for skill pills */
-.pdf-rendering .bg-gray-50.text-gray-700 {
-  background-color: #F9FAFB !important;
-  color: #374151 !important;
-  display: inline-block !important;
+.pdf-rendering .font-black {
+  font-weight: 900 !important;
 }
 
-/* Fix for Template2 border */
-.pdf-rendering .border-l-8 {
-  border-left-width: 8px !important;
-  border-left-style: solid !important;
-  border-left-color: #2563EB !important;
+/* ===== Shadow fixes ===== */
+.pdf-rendering .shadow-lg {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
 }
 
-/* Fix text-blue-600 color */
-.pdf-rendering .text-blue-600 {
-  color: #2563EB !important;
+/* ===== Text style fixes ===== */
+.pdf-rendering .leading-relaxed {
+  line-height: 1.6 !important;
+}
+
+.pdf-rendering .tracking-wide {
+  letter-spacing: 0.025em !important;
+}
+
+/* ===== Image fixes ===== */
+.pdf-rendering img {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  max-width: 100% !important;
+  object-fit: cover !important;
 }
