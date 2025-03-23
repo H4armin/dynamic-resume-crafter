@@ -159,7 +159,7 @@ function optimizeForPrint(
     }
     
     /* Template-specific optimizations */
-    ${getTemplateSpecificStyles(templateType)}
+    ${getTemplateSpecificStyles(elementId, templateType)}
   `;
   
   documentClone.head.appendChild(styleElement);
@@ -179,7 +179,7 @@ function optimizeForPrint(
 /**
  * Get template-specific CSS styles
  */
-function getTemplateSpecificStyles(templateType: string): string {
+function getTemplateSpecificStyles(elementId: string, templateType: string): string {
   switch (templateType) {
     case "template2":
       return `
