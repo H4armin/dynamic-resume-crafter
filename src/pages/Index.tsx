@@ -3,6 +3,7 @@ import { ChevronRight, Sparkles, Shield, Clock, Lock, Download, CheckCircle, Edi
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
+import ThreeDStepIcon from "@/components/ThreeDStepIcon";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -74,7 +75,7 @@ const Index = () => {
           ))}
         </motion.div>
 
-        {/* How It Works - Enhanced with images and more details */}
+        {/* How It Works - Enhanced with 3D icons */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -95,7 +96,7 @@ const Index = () => {
                 title: "Enter Your Details",
                 desc: "Fill in your personal and professional details through our user-friendly form interface",
                 icon: Edit,
-                image: "/lovable-uploads/de190eac-26bf-497b-9b53-ecd4b360aedd.png",
+                color: "#ff4d4d",
                 bullets: [
                   "Simple form interface",
                   "AI-powered suggestions",
@@ -107,7 +108,7 @@ const Index = () => {
                 title: "Customize Your Resume",
                 desc: "Choose from various templates and styles to match your professional persona",
                 icon: Layout,
-                image: "/public/lovable-uploads/a779d399-caa5-4873-9919-132035b4ab09.png",
+                color: "#4da6ff",
                 bullets: [
                   "Multiple professional templates",
                   "Customize colors and fonts",
@@ -119,7 +120,7 @@ const Index = () => {
                 title: "Preview & Download",
                 desc: "Review your finished resume and save it as a PDF directly on your device",
                 icon: FileText,
-                image: "/public/lovable-uploads/cd91647f-7f95-44a3-95e3-81644b7849bc.png",
+                color: "#4dff88",
                 bullets: [
                   "Instant PDF generation",
                   "Print-ready quality",
@@ -128,18 +129,8 @@ const Index = () => {
               },
             ].map((step, i) => (
               <div key={i} className="flex flex-col items-center">
-                <div className="relative mb-6">
-                  <div className="w-16 h-16 rounded-full bg-black text-white flex items-center justify-center text-2xl font-bold">
-                    {step.number}
-                  </div>
-                </div>
-                
-                <div className="rounded-xl overflow-hidden mb-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
-                  <img 
-                    src={step.image} 
-                    alt={step.title} 
-                    className="w-full h-48 object-cover object-top"
-                  />
+                <div className="relative mb-6 w-full">
+                  <ThreeDStepIcon step={i + 1} color={step.color} />
                 </div>
                 
                 <h3 className="text-xl font-semibold mb-3">{step.title}</h3>
