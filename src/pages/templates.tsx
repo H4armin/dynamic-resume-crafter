@@ -55,6 +55,13 @@ const TemplateCard = ({ template, onSelect, onPreview }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
+  // Preload image
+  useEffect(() => {
+    const img = new Image();
+    img.src = template.image;
+    img.onload = () => setImageLoaded(true);
+  }, [template.image]);
+
   return (
     <motion.div
       key={template.id}
@@ -72,10 +79,9 @@ const TemplateCard = ({ template, onSelect, onPreview }) => {
           </div>
         )}
         <img
-          src={template.image}
+          src={imageLoaded ? template.image : template.placeholderImage}
           alt={template.name}
           className={`w-full h-full object-cover transition-opacity duration-300 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
-          onLoad={() => setImageLoaded(true)}
           loading="lazy"
         />
         <div className={`absolute inset-0 bg-black/50 flex items-center justify-center transition-opacity duration-300 ${isHovered || !imageLoaded ? 'opacity-100' : 'opacity-0'}`}>
@@ -117,12 +123,22 @@ const Templates = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate checking if all images are loaded
-    const timer = setTimeout(() => {
+    // Preload images
+    const preloadImages = async () => {
+      const imagePromises = templates.map(template => {
+        return new Promise((resolve) => {
+          const img = new Image();
+          img.src = template.image;
+          img.onload = resolve;
+          img.onerror = resolve;
+        });
+      });
+      
+      await Promise.all(imagePromises);
       setIsLoading(false);
-    }, 500);
+    };
     
-    return () => clearTimeout(timer);
+    preloadImages();
   }, []);
 
   const handleTemplateSelect = (templateId) => {

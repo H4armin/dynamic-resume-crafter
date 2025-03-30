@@ -755,7 +755,10 @@ const Editor = () => {
 
           <div className={`${isMobile ? 'w-full' : 'w-1/2'} bg-white p-6 overflow-y-auto`}>
             <div id="resume-preview" className="w-full h-full">
-              <ResumePreview data={form.watch() as ResumeFormValues} templateId={templateId} />
+              <ResumePreview 
+                data={form.watch() as ResumeFormValues} 
+                templateId={templateId}
+              />
             </div>
           </div>
         </div>

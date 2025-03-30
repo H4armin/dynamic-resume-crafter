@@ -3,7 +3,7 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
 /**
- * Simple, reliable PDF generation function
+ * Simple, reliable PDF generation function that matches UI
  * @param elementId - DOM ID of the element to export
  * @param filename - Output PDF filename
  * @returns Promise<boolean> - Success status
@@ -36,7 +36,7 @@ export const generatePDF = async (elementId: string, filename: string = "resume.
 
     // Create high-resolution canvas
     const canvas = await html2canvas(element, {
-      scale: 3, // Higher resolution
+      scale: 2, // Higher resolution
       useCORS: true,
       allowTaint: true,
       logging: false,
@@ -58,40 +58,17 @@ export const generatePDF = async (elementId: string, filename: string = "resume.
       orientation: imgHeight > a4Height ? "landscape" : "portrait",
     });
     
-    // Handle multi-page output if needed
-    let heightLeft = imgHeight;
-    let position = 20; // Top margin
-    const leftMargin = 20; // Left margin
-    
-    // Add first page
+    // Add image to PDF
     pdf.addImage(
       canvas.toDataURL("image/jpeg", 1.0),
       "JPEG",
-      leftMargin,
-      position,
+      20, // left margin
+      20, // top margin
       imgWidth,
       imgHeight,
       undefined,
       "FAST"
     );
-    heightLeft -= (a4Height - 40); // 20pt margin top and bottom
-    
-    // Add subsequent pages if needed
-    while (heightLeft > 0) {
-      position = 20; // Reset position for new page
-      pdf.addPage();
-      pdf.addImage(
-        canvas.toDataURL("image/jpeg", 1.0),
-        "JPEG",
-        leftMargin,
-        position - (a4Height - 40) * (imgHeight - heightLeft) / imgHeight,
-        imgWidth,
-        imgHeight,
-        undefined,
-        "FAST"
-      );
-      heightLeft -= (a4Height - 40);
-    }
     
     // Save the PDF
     pdf.save(filename);
