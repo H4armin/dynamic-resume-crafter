@@ -79,5 +79,5 @@ export const defaultResumeValues: ResumeFormValues = {
     "Agile/Scrum",
     "Team Leadership"
   ],
-  profileImage: "/public/lovable-uploads/a779d399-caa5-4873-9919-132035b4ab09.png"
+  profileImage: "/public/uploads/a779d399-caa5-4873-9919-132035b4ab09.png"
 };

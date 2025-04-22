@@ -235,24 +235,45 @@ const Editor = () => {
         throw new Error("API key not configured. Please set VITE_GEMINI_API_KEY in your environment variables.");
       }
 
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
       
       const requestBody = {
-        contents: [{ parts: [{ text: prompt }] }],
+        contents: [{ 
+          parts: [{ text: prompt }] 
+        }],
+        generationConfig: {
+          temperature: 0.7,
+          topK: 40,
+          topP: 0.95,
+          maxOutputTokens: 1024,
+        }
       };
 
       const response = await fetch(url, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "POST",
+          "Access-Control-Allow-Headers": "Content-Type"
+        },
+        mode: "cors", // Add this
         body: JSON.stringify(requestBody),
       });
 
       if (!response.ok) {
-        throw new Error(`API error: ${response.status} ${response.statusText}`);
+        const errorText = await response.text();
+        console.error('API Response:', {
+          status: response.status,
+          statusText: response.statusText,
+          body: errorText
+        });
+        throw new Error(`API error: ${response.status} ${response.statusText} - ${errorText}`);
       }
 
       const data = await response.json();
-      const generatedText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      console.log(data);
+      const generatedText = data?.contents?.[0]?.parts?.[0]?.text;
       
       if (!generatedText) {
         throw new Error("No content generated");

@@ -1,129 +1,71 @@
-
-import React, { useRef } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
-import { Group } from 'three';
+import React from 'react';
 
 interface ThreeDStepIconProps {
   step: number;
   color?: string;
 }
 
-const FormIcon = ({ color = '#ff4d4d' }) => {
-  const groupRef = useRef<Group>(null);
-  
-  useFrame((state) => {
-    if (groupRef.current) {
-      groupRef.current.rotation.y = state.clock.getElapsedTime() * 0.3;
-    }
-  });
-
-  return (
-    <group ref={groupRef}>
-      <mesh position={[0, 0, 0]}>
-        <boxGeometry args={[1.5, 2, 0.1]} />
-        <meshStandardMaterial color={color} />
-      </mesh>
-      {/* Form lines */}
-      {[-0.5, 0, 0.5].map((y, i) => (
-        <mesh key={i} position={[-0.2, y, 0.06]}>
-          <boxGeometry args={[0.8, 0.1, 0.1]} />
-          <meshStandardMaterial color="#ffffff" />
-        </mesh>
-      ))}
-      {/* Form checkbox */}
-      <mesh position={[0.45, 0.5, 0.06]}>
-        <boxGeometry args={[0.2, 0.2, 0.1]} />
-        <meshStandardMaterial color="#ffffff" />
-      </mesh>
-    </group>
-  );
-};
-
-const TemplateIcon = ({ color = '#4da6ff' }) => {
-  const groupRef = useRef<Group>(null);
-  
-  useFrame((state) => {
-    if (groupRef.current) {
-      groupRef.current.rotation.y = state.clock.getElapsedTime() * 0.3;
-    }
-  });
-
-  return (
-    <group ref={groupRef}>
-      <mesh position={[0, 0, 0]}>
-        <boxGeometry args={[2, 2, 0.1]} />
-        <meshStandardMaterial color={color} />
-      </mesh>
-      {/* Template layout elements */}
-      <mesh position={[-0.5, 0.7, 0.06]}>
-        <boxGeometry args={[0.8, 0.3, 0.05]} />
-        <meshStandardMaterial color="#ffffff" />
-      </mesh>
-      <mesh position={[-0.5, 0, 0.06]}>
-        <boxGeometry args={[0.8, 1, 0.05]} />
-        <meshStandardMaterial color="#ffffff" opacity={0.5} transparent />
-      </mesh>
-      <mesh position={[0.5, 0.3, 0.06]}>
-        <boxGeometry args={[0.8, 1.4, 0.05]} />
-        <meshStandardMaterial color="#ffffff" opacity={0.7} transparent />
-      </mesh>
-    </group>
-  );
-};
-
-const DocumentIcon = ({ color = '#4dff88' }) => {
-  const groupRef = useRef<Group>(null);
-  
-  useFrame((state) => {
-    if (groupRef.current) {
-      groupRef.current.rotation.y = state.clock.getElapsedTime() * 0.3;
-    }
-  });
-
-  return (
-    <group ref={groupRef}>
-      {/* PDF page */}
-      <mesh position={[0, 0, 0]}>
-        <boxGeometry args={[1.6, 2, 0.05]} />
-        <meshStandardMaterial color="#ffffff" />
-      </mesh>
-      
-      {/* PDF header */}
-      <mesh position={[0, 0.8, 0.06]}>
-        <boxGeometry args={[1.4, 0.3, 0.05]} />
-        <meshStandardMaterial color={color} />
-      </mesh>
-      
-      {/* PDF content lines */}
-      {[-0.2, -0.5, -0.8].map((y, i) => (
-        <mesh key={i} position={[0, y, 0.06]}>
-          <boxGeometry args={[1.2, 0.1, 0.05]} />
-          <meshStandardMaterial color="#dddddd" />
-        </mesh>
-      ))}
-      
-      {/* PDF corner fold */}
-      <mesh position={[0.55, 0.75, 0.03]} rotation={[0, 0, Math.PI / 4]}>
-        <boxGeometry args={[0.4, 0.4, 0.05]} />
-        <meshStandardMaterial color={color} />
-      </mesh>
-    </group>
-  );
-};
-
+/**
+ * A 2D version of the step icon that doesn't rely on Three.js
+ * This avoids compatibility issues between Three.js versions
+ */
 const ThreeDStepIcon: React.FC<ThreeDStepIconProps> = ({ step, color }) => {
+  // Define colors for each step
+  const getStepColor = () => {
+    if (color) return color;
+    
+    switch (step) {
+      case 1: return '#ff4d4d'; // Red for form
+      case 2: return '#4da6ff'; // Blue for template
+      case 3: return '#4dff88'; // Green for document
+      default: return '#888888';
+    }
+  };
+
+  // Define icons for each step
+  const getStepIcon = () => {
+    switch (step) {
+      case 1:
+        return (
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-16 h-16">
+            <rect x="3" y="3" width="18" height="18" rx="2" fill={getStepColor()} />
+            <line x1="7" y1="9" x2="17" y2="9" stroke="white" strokeWidth="2" />
+            <line x1="7" y1="12" x2="17" y2="12" stroke="white" strokeWidth="2" />
+            <line x1="7" y1="15" x2="13" y2="15" stroke="white" strokeWidth="2" />
+          </svg>
+        );
+      case 2:
+        return (
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-16 h-16">
+            <rect x="3" y="3" width="18" height="18" rx="2" fill={getStepColor()} />
+            <rect x="6" y="6" width="6" height="4" fill="white" />
+            <rect x="6" y="11" width="12" height="2" fill="white" opacity="0.7" />
+            <rect x="6" y="14" width="12" height="2" fill="white" opacity="0.7" />
+            <rect x="6" y="17" width="8" height="2" fill="white" opacity="0.7" />
+          </svg>
+        );
+      case 3:
+        return (
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-16 h-16">
+            <path d="M19 3H5C3.89 3 3 3.9 3 5V19C3 20.1 3.89 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3Z" fill="white" />
+            <path d="M19 3H5C3.89 3 3 3.9 3 5V19C3 20.1 3.89 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3Z" stroke={getStepColor()} strokeWidth="2" />
+            <path d="M17 7H7V9H17V7Z" fill={getStepColor()} />
+            <path d="M7 11H17V12H7V11Z" fill="#dddddd" />
+            <path d="M7 14H17V15H7V14Z" fill="#dddddd" />
+            <path d="M7 17H13V18H7V17Z" fill="#dddddd" />
+            <path d="M17 3L21 7H17V3Z" fill={getStepColor()} />
+          </svg>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
-    <div className="h-48 w-full">
-      <Canvas camera={{ position: [0, 0, 4], fov: 50 }}>
-        <ambientLight intensity={0.5} />
-        <pointLight position={[10, 10, 10]} intensity={1} />
-        <pointLight position={[-10, -10, -10]} intensity={0.5} />
-        {step === 1 && <FormIcon color={color} />}
-        {step === 2 && <TemplateIcon color={color} />}
-        {step === 3 && <DocumentIcon color={color} />}
-        <OrbitControls enableZoom={false} autoRotate={false} />
-      </Canvas>
+    <div className="h-48 w-full relative bg-gray-50 rounded-lg flex items-center justify-center">
+      <div className="transform transition-transform hover:scale-110 duration-300">
+        {getStepIcon()}
+      </div>
       <div className="absolute top-2 left-2 w-10 h-10 rounded-full bg-black text-white flex items-center justify-center text-2xl font-bold z-10">
         {step}
       </div>

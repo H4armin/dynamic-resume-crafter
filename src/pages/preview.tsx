@@ -62,7 +62,7 @@ const Preview = () => {
       "User Testing", 
       "Sketch"
     ],
-    profileImage: "/lovable-uploads/5f97d2a4-21c2-4d7b-b431-60b64cf76d34.png"
+    profileImage: "/uploads/5f97d2a4-21c2-4d7b-b431-60b64cf76d34.png"
   };
 
   // Render the actual template component
@@ -85,15 +85,15 @@ const Preview = () => {
   const getTemplateImage = () => {
     switch (templateId) {
       case "template1":
-        return "/lovable-uploads/449e5016-df65-47df-8d7c-ea19d579fb32.png";
+        return "/uploads/449e5016-df65-47df-8d7c-ea19d579fb32.png";
       case "template2":
-        return "/lovable-uploads/881d45df-3691-4b93-8002-dc100239d1e4.png";
+        return "/uploads/881d45df-3691-4b93-8002-dc100239d1e4.png";
       case "template3":
-        return "/lovable-uploads/37098c6c-11be-41ef-ac62-49670d910613.png";
+        return "/uploads/37098c6c-11be-41ef-ac62-49670d910613.png";
       case "template4":
-        return "/lovable-uploads/cd91647f-7f95-44a3-95e3-81644b7849bc.png";
+        return "/uploads/cd91647f-7f95-44a3-95e3-81644b7849bc.png";
       default:
-        return "/lovable-uploads/449e5016-df65-47df-8d7c-ea19d579fb32.png";
+        return "/uploads/449e5016-df65-47df-8d7c-ea19d579fb32.png";
     }
   };
 
