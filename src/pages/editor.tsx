@@ -27,10 +27,7 @@ import {
 import { saveResumeToStorage, loadResumeFromStorage } from "@/utils/storage";
 import { generatePDF, previewResume } from "@/utils/pdf";
 import { ResumeFormValues, defaultResumeValues, ExperienceItem, EducationItem } from "@/types/resume";
-import { Template1 } from "@/components/resume-templates/Template1";
-import { Template2 } from "@/components/resume-templates/Template2";
-import { Template3 } from "@/components/resume-templates/Template3";
-import { Template4 } from "@/components/resume-templates/Template4";
+import ResumePreview from "@/components/ResumePreview";
 import CustomizationPanel from "@/components/CustomizationPanel";
 import { CustomizationProvider } from "@/contexts/CustomizationContext";
 import "../styles/pdf.css";
@@ -358,21 +355,6 @@ const Editor = () => {
       </DropdownMenuContent>
     </DropdownMenu>
   );
-
-  const ResumePreview = ({ data, templateId }: { data: ResumeFormValues; templateId?: string }) => {
-    switch (templateId) {
-      case "template1":
-        return <Template1 data={data} />;
-      case "template2":
-        return <Template2 data={data} />;
-      case "template3":
-        return <Template3 data={data} />;
-      case "template4":
-        return <Template4 data={data} />;
-      default:
-        return <Template1 data={data} />;
-    }
-  };
 
   return (
     <CustomizationProvider>
