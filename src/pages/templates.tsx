@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 import { FileText, Download, Eye, Settings2, FileCode2, Users, Award, BarChart } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -15,7 +14,7 @@ const categories = [
   { id: "ats", name: "ATS", icon: BarChart }
 ];
 
-// Updated template data with placeholder images
+// Updated template data with new templates
 const templates = [
   {
     id: "template1",
@@ -48,6 +47,38 @@ const templates = [
     image: "/uploads/cd91647f-7f95-44a3-95e3-81644b7849bc.png",
     placeholderImage: "/placeholder.svg",
     category: "professional"
+  },
+  {
+    id: "template5",
+    name: "Corporate Blue",
+    description: "Professional dark sidebar with skill bars",
+    image: "/placeholder.svg",
+    placeholderImage: "/placeholder.svg",
+    category: "professional"
+  },
+  {
+    id: "template6",
+    name: "Executive Orange",
+    description: "Executive style with progress bars and orange accents",
+    image: "/placeholder.svg",
+    placeholderImage: "/placeholder.svg",
+    category: "professional"
+  },
+  {
+    id: "template7",
+    name: "Creative Green",
+    description: "Creative design with green header and timeline",
+    image: "/placeholder.svg",
+    placeholderImage: "/placeholder.svg",
+    category: "creative"
+  },
+  {
+    id: "template8",
+    name: "Minimalist",
+    description: "Clean minimalist design with elegant typography",
+    image: "/placeholder.svg",
+    placeholderImage: "/placeholder.svg",
+    category: "simple"
   }
 ];
 

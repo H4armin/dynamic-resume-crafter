@@ -6,6 +6,10 @@ import { Template1 } from "@/components/resume-templates/Template1";
 import { Template2 } from "@/components/resume-templates/Template2";
 import { Template3 } from "@/components/resume-templates/Template3";
 import { Template4 } from "@/components/resume-templates/Template4";
+import { Template5 } from "@/components/resume-templates/Template5";
+import { Template6 } from "@/components/resume-templates/Template6";
+import { Template7 } from "@/components/resume-templates/Template7";
+import { Template8 } from "@/components/resume-templates/Template8";
 import { defaultResumeValues } from "@/types/resume";
 import { CustomizationProvider } from "@/contexts/CustomizationContext";
 
@@ -76,6 +80,14 @@ const Preview = () => {
         return <Template3 data={sampleData} />;
       case "template4":
         return <Template4 data={sampleData} />;
+      case "template5":
+        return <Template5 data={sampleData} />;
+      case "template6":
+        return <Template6 data={sampleData} />;
+      case "template7":
+        return <Template7 data={sampleData} />;
+      case "template8":
+        return <Template8 data={sampleData} />;
       default:
         return <Template1 data={sampleData} />;
     }
@@ -92,6 +104,11 @@ const Preview = () => {
         return "/uploads/37098c6c-11be-41ef-ac62-49670d910613.png";
       case "template4":
         return "/uploads/cd91647f-7f95-44a3-95e3-81644b7849bc.png";
+      case "template5":
+      case "template6":
+      case "template7":
+      case "template8":
+        return "/placeholder.svg";
       default:
         return "/uploads/449e5016-df65-47df-8d7c-ea19d579fb32.png";
     }
