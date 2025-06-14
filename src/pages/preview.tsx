@@ -6,6 +6,12 @@ import { Template1 } from "@/components/resume-templates/Template1";
 import { Template2 } from "@/components/resume-templates/Template2";
 import { Template3 } from "@/components/resume-templates/Template3";
 import { Template4 } from "@/components/resume-templates/Template4";
+import { Template9 } from "@/components/resume-templates/Template9";
+import { Template10 } from "@/components/resume-templates/Template10";
+import { Template11 } from "@/components/resume-templates/Template11";
+import { Template12 } from "@/components/resume-templates/Template12";
+import { Template13 } from "@/components/resume-templates/Template13";
+import { Template14 } from "@/components/resume-templates/Template14";
 import { defaultResumeValues } from "@/types/resume";
 import { CustomizationProvider } from "@/contexts/CustomizationContext";
 
@@ -76,6 +82,18 @@ const Preview = () => {
         return <Template3 data={sampleData} />;
       case "template4":
         return <Template4 data={sampleData} />;
+      case "template9":
+        return <Template9 data={sampleData} />;
+      case "template10":
+        return <Template10 data={sampleData} />;
+      case "template11":
+        return <Template11 data={sampleData} />;
+      case "template12":
+        return <Template12 data={sampleData} />;
+      case "template13":
+        return <Template13 data={sampleData} />;
+      case "template14":
+        return <Template14 data={sampleData} />;
       default:
         return <Template1 data={sampleData} />;
     }
@@ -92,6 +110,18 @@ const Preview = () => {
         return "/uploads/37098c6c-11be-41ef-ac62-49670d910613.png";
       case "template4":
         return "/uploads/cd91647f-7f95-44a3-95e3-81644b7849bc.png";
+      case "template9":
+        return "/lovable-uploads/b68b8d53-6239-43fd-82e0-836ee6e2962f.png";
+      case "template10":
+        return "/lovable-uploads/4d2aff6f-4d59-4210-8c9a-bd6e1810b0d6.png";
+      case "template11":
+        return "/lovable-uploads/a75ab361-dc1b-4621-a365-1bd1631a479f.png";
+      case "template12":
+        return "/lovable-uploads/63cf6638-861c-4856-bde8-053b5b15cff7.png";
+      case "template13":
+        return "/lovable-uploads/40cefb1b-f64b-4545-8337-72cb45d1d10a.png";
+      case "template14":
+        return "/lovable-uploads/6ef5744f-4aad-40bc-9e18-75f0d15122de.png";
       default:
         return "/uploads/449e5016-df65-47df-8d7c-ea19d579fb32.png";
     }

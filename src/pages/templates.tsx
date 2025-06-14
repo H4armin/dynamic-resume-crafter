@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 import { FileText, Download, Eye, Settings2, FileCode2, Users, Award, BarChart } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -15,7 +14,7 @@ const categories = [
   { id: "ats", name: "ATS", icon: BarChart }
 ];
 
-// Updated template data with placeholder images
+// Updated template data with new templates
 const templates = [
   {
     id: "template1",
@@ -48,6 +47,54 @@ const templates = [
     image: "/uploads/cd91647f-7f95-44a3-95e3-81644b7849bc.png",
     placeholderImage: "/placeholder.svg",
     category: "professional"
+  },
+  {
+    id: "template9",
+    name: "Black Header Classic",
+    description: "Elegant design with black header and profile photo",
+    image: "/lovable-uploads/b68b8d53-6239-43fd-82e0-836ee6e2962f.png",
+    placeholderImage: "/placeholder.svg",
+    category: "professional"
+  },
+  {
+    id: "template10",
+    name: "Clean Border",
+    description: "Simple design with blue border and clear sections",
+    image: "/lovable-uploads/4d2aff6f-4d59-4210-8c9a-bd6e1810b0d6.png",
+    placeholderImage: "/placeholder.svg",
+    category: "simple"
+  },
+  {
+    id: "template11",
+    name: "Photo Sidebar",
+    description: "Modern layout with photo and contact details",
+    image: "/lovable-uploads/a75ab361-dc1b-4621-a365-1bd1631a479f.png",
+    placeholderImage: "/placeholder.svg",
+    category: "modern"
+  },
+  {
+    id: "template12",
+    name: "Teal Sidebar",
+    description: "Professional design with colored sidebar",
+    image: "/lovable-uploads/63cf6638-861c-4856-bde8-053b5b15cff7.png",
+    placeholderImage: "/placeholder.svg",
+    category: "creative"
+  },
+  {
+    id: "template13",
+    name: "Artistic Shapes",
+    description: "Creative design with decorative elements",
+    image: "/lovable-uploads/40cefb1b-f64b-4545-8337-72cb45d1d10a.png",
+    placeholderImage: "/placeholder.svg",
+    category: "creative"
+  },
+  {
+    id: "template14",
+    name: "Dark Gradient",
+    description: "Modern dark theme with gradient background",
+    image: "/lovable-uploads/6ef5744f-4aad-40bc-9e18-75f0d15122de.png",
+    placeholderImage: "/placeholder.svg",
+    category: "modern"
   }
 ];
 
