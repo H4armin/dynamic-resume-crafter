@@ -4,6 +4,7 @@ import Index from "@/pages/Index";
 import Templates from "@/pages/templates";
 import Editor from "@/pages/editor";
 import Preview from "@/pages/preview";
+import ATSAnalyzer from "@/pages/ats-analyzer";
 import NotFound from "@/pages/NotFound";
 import { CustomizationProvider } from "@/contexts/CustomizationContext";
 import { Toaster } from "@/components/ui/toaster";
@@ -21,6 +22,7 @@ function App() {
             <Route path="/templates" element={<Templates />} />
             <Route path="/editor/:templateId" element={<Editor />} />
             <Route path="/preview/:templateId" element={<Preview />} />
+            <Route path="/ats-analyzer" element={<ATSAnalyzer />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
