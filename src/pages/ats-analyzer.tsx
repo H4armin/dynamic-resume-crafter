@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,7 +15,25 @@ const ATSAnalyzer = () => {
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file && file.type === "text/plain") {
+    if (!file) return;
+
+    const allowedTypes = [
+      'text/plain',
+      'application/pdf',
+      'image/jpeg',
+      'image/jpg',
+      'image/png',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    ];
+
+    if (!allowedTypes.includes(file.type)) {
+      toast.error("Please upload a supported file format (PDF, DOC, DOCX, TXT, JPG, PNG)");
+      return;
+    }
+
+    // For text files, read directly
+    if (file.type === "text/plain") {
       const reader = new FileReader();
       reader.onload = (e) => {
         setResume(e.target?.result as string);
@@ -24,7 +41,9 @@ const ATSAnalyzer = () => {
       };
       reader.readAsText(file);
     } else {
-      toast.error("Please upload a text file (.txt)");
+      // For other formats, show a message that they need to paste the content
+      toast.info("File uploaded! Please paste the text content of your resume in the text area below.");
+      // You could implement OCR or PDF text extraction here in the future
     }
   };
 
@@ -89,14 +108,17 @@ const ATSAnalyzer = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <Label htmlFor="resume-upload">Upload Resume (Text file)</Label>
+                <Label htmlFor="resume-upload">Upload Resume</Label>
                 <input
                   id="resume-upload"
                   type="file"
-                  accept=".txt"
+                  accept=".txt,.pdf,.doc,.docx,.jpg,.jpeg,.png"
                   onChange={handleFileUpload}
                   className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 mt-2"
                 />
+                <p className="text-xs text-gray-500 mt-1">
+                  Supported formats: PDF, DOC, DOCX, TXT, JPG, PNG
+                </p>
               </div>
               <div>
                 <Label htmlFor="resume-text">Or paste your resume text</Label>
