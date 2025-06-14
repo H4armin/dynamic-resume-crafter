@@ -1,12 +1,10 @@
 
 import { motion } from "framer-motion";
-import { ChevronRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { ArrowRight, FileText, Target } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
-  const navigate = useNavigate();
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -14,39 +12,36 @@ const Hero = () => {
       transition={{ duration: 0.6 }}
       className="text-center space-y-8"
     >
-      <div className="inline-flex items-center rounded-full bg-black px-4 py-2 text-sm font-medium text-white">
-        <Sparkles className="mr-2 h-4 w-4" /> AI-Powered Resume Builder
-      </div>
-
       <div className="space-y-4">
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight">
-          Create Your Perfect Resume
-          <br />
-          <span className="text-gray-400">in Minutes</span>
+        <h1 className="text-4xl md:text-6xl font-bold text-gray-900 leading-tight">
+          Create Your Perfect Resume in{" "}
+          <span className="text-blue-600">Minutes</span>
         </h1>
-        
-        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-          Professional templates combined with AI-powered content suggestions to help you craft the perfect resume.
+        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          Build professional, ATS-friendly resumes with our AI-powered builder. 
+          Choose from beautiful templates and get your resume analyzed for maximum impact.
         </p>
       </div>
-
-      <div className="flex items-center justify-center gap-4 pt-4">
-        <Button
-          size="lg"
-          className="bg-black text-white hover:bg-gray-800 hover-lift text-lg px-8"
-          onClick={() => navigate("/templates")}
-        >
-          Create Resume
-          <ChevronRight className="ml-2 h-5 w-5" />
-        </Button>
-        <Button
-          size="lg"
-          variant="outline"
-          className="hover-lift text-lg px-8"
-          onClick={() => navigate("/templates")}
-        >
-          View Templates
-        </Button>
+      
+      <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <Link to="/templates">
+          <Button size="lg" className="px-8 py-3">
+            <FileText className="w-5 h-5 mr-2" />
+            Create Resume
+            <ArrowRight className="w-4 h-4 ml-2" />
+          </Button>
+        </Link>
+        
+        <Link to="/ats-analyzer">
+          <Button variant="outline" size="lg" className="px-8 py-3">
+            <Target className="w-5 h-5 mr-2" />
+            Analyze Resume
+          </Button>
+        </Link>
+      </div>
+      
+      <div className="text-sm text-gray-500">
+        No credit card required • Free templates • ATS optimization
       </div>
     </motion.div>
   );
