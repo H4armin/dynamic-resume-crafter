@@ -2,54 +2,68 @@
 import { ResumeFormValues } from "@/types/resume";
 
 export const Template2 = ({ data }: { data: Partial<ResumeFormValues> }) => (
-  <div className="bg-white p-12 rounded-xl shadow-lg max-w-5xl mx-auto">
-    <div className="border-l-8 border-blue-600 pl-8 mb-12">
-      <h1 className="text-[40px] font-black text-gray-900 mb-3 tracking-wide">{data.fullName || "John Doe"}</h1>
-      <div className="text-gray-600 text-lg">
-        {data.email} <span className="mx-2">•</span> {data.phone}
-      </div>
+  <div className="bg-white max-w-4xl mx-auto shadow-lg">
+    {/* Header */}
+    <div className="bg-white p-8 border-b">
+      <h1 className="text-4xl font-bold text-gray-900 mb-2">{data.fullName || "Kate Bishop"}</h1>
+      <p className="text-xl text-blue-600 font-semibold mb-4">Product Designer</p>
+      <p className="text-gray-700 max-w-3xl">{data.summary}</p>
     </div>
 
-    <div className="mb-12">
-      <h2 className="text-2xl font-bold text-blue-600 mb-4">Professional Summary</h2>
-      <p className="text-gray-700 text-lg leading-relaxed">{data.summary}</p>
-    </div>
-
-    <div className="mb-12">
-      <h2 className="text-2xl font-bold text-blue-600 mb-6">Experience</h2>
-      {data.experience?.map((exp, index) => (
-        <div key={index} className="mb-8">
-          <h3 className="text-xl font-bold text-gray-800">{exp.title}</h3>
-          <div className="text-gray-600 mb-3">
-            {exp.company} <span className="text-gray-400 mx-2">|</span> {exp.period}
+    <div className="p-8">
+      <div className="grid grid-cols-3 gap-8">
+        {/* Left Column - Contact Info */}
+        <div className="space-y-6">
+          <div>
+            <h3 className="text-lg font-bold text-gray-900 mb-3">Contact</h3>
+            <div className="space-y-2 text-sm">
+              <p className="text-gray-700">{data.email}</p>
+              <p className="text-gray-700">linkedin.com/in/{data.fullName?.toLowerCase().replace(' ', '-')}</p>
+              <p className="text-gray-700">{data.phone}</p>
+            </div>
           </div>
-          <p className="text-gray-700 leading-relaxed">{exp.description}</p>
+
+          <div>
+            <h3 className="text-lg font-bold text-gray-900 mb-3">Skills</h3>
+            <div className="space-y-1 text-sm">
+              {data.skills?.map((skill, index) => (
+                <p key={index} className="text-gray-700">{skill}</p>
+              ))}
+            </div>
+          </div>
         </div>
-      ))}
-    </div>
 
-    <div className="grid grid-cols-2 gap-12">
-      <div>
-        <h2 className="text-2xl font-bold text-blue-600 mb-6">Education</h2>
-        {data.education?.map((edu, index) => (
-          <div key={index} className="mb-4">
-            <h3 className="text-xl font-bold text-gray-800">{edu.degree}</h3>
-            <div className="text-gray-600">{edu.school}, {edu.year}</div>
+        {/* Center Column - Experience */}
+        <div className="space-y-6">
+          <div>
+            <h3 className="text-xl font-bold text-blue-600 mb-4">Work experience</h3>
+            <div className="space-y-4">
+              {data.experience?.map((exp, index) => (
+                <div key={index} className="border-l-2 border-blue-200 pl-4">
+                  <h4 className="font-bold text-gray-900">{exp.title}</h4>
+                  <p className="text-blue-600 font-medium">{exp.company}</p>
+                  <p className="text-gray-600 text-sm italic">{exp.period}</p>
+                  <p className="text-gray-700 text-sm mt-2">{exp.description}</p>
+                </div>
+              ))}
+            </div>
           </div>
-        ))}
-      </div>
+        </div>
 
-      <div>
-        <h2 className="text-2xl font-bold text-blue-600 mb-6">Skills</h2>
-        <div className="flex flex-wrap gap-2">
-          {data.skills?.map((skill, index) => (
-            <span 
-              key={index} 
-              className="bg-gray-50 text-gray-700 px-4 py-2 rounded-lg text-sm"
-            >
-              {skill}
-            </span>
-          ))}
+        {/* Right Column - Education */}
+        <div className="space-y-6">
+          <div>
+            <h3 className="text-xl font-bold text-blue-600 mb-4">Education & learning</h3>
+            <div className="space-y-4">
+              {data.education?.map((edu, index) => (
+                <div key={index}>
+                  <h4 className="font-bold text-gray-900">{edu.degree}</h4>
+                  <p className="text-gray-600">{edu.school}</p>
+                  <p className="text-gray-500 text-sm">{edu.year}</p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -2,83 +2,78 @@
 import { ResumeFormValues } from "@/types/resume";
 
 export const Template11 = ({ data }: { data: Partial<ResumeFormValues> }) => (
-  <div className="bg-white max-w-4xl mx-auto shadow-lg border border-blue-300">
-    {/* Header with photo */}
-    <div className="p-8">
-      <div className="flex items-start gap-6 mb-8">
-        {data.profileImage && (
-          <div className="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0">
-            <img src={data.profileImage} alt="Profile" className="w-full h-full object-cover" />
-          </div>
-        )}
-        <div>
-          <div className="text-sm text-blue-600 mb-1">WEB-DESIGNER</div>
-          <h1 className="text-3xl font-bold text-gray-800 mb-4">{data.fullName || "Sherry Betts"}</h1>
-          <div className="space-y-1 text-sm text-gray-600">
-            <div>📧 {data.email}</div>
-            <div>📍 2207 Beach Avenue, Los Angeles</div>
-            <div>🌐 behance.com/sherrybetts</div>
-            <div>📱 {data.phone}</div>
-          </div>
-        </div>
+  <div className="bg-white max-w-4xl mx-auto shadow-lg relative">
+    {/* Decorative corner elements */}
+    <div className="absolute top-0 right-0 w-20 h-20 bg-blue-600 opacity-80"></div>
+    <div className="absolute bottom-0 right-0 w-32 h-20 bg-blue-400 opacity-60 rounded-tl-full"></div>
+
+    <div className="p-8 relative z-10">
+      {/* Header */}
+      <div className="text-right mb-8">
+        <h1 className="text-5xl font-bold text-blue-900 mb-2">
+          {data.fullName?.split(' ')[0] || "Rick"} 
+          <span className="block text-6xl">{data.fullName?.split(' ')[1] || "Tang"}</span>
+        </h1>
       </div>
 
-      <div className="grid grid-cols-3 gap-8">
-        {/* Left Column */}
-        <div className="col-span-2 space-y-8">
-          {/* Profile */}
+      <div className="grid grid-cols-5 gap-8">
+        {/* Left Column - 2/5 width */}
+        <div className="col-span-2 space-y-6">
           <div>
-            <h2 className="text-lg font-bold text-gray-800 mb-4">Profile</h2>
-            <p className="text-gray-600 leading-relaxed text-sm">{data.summary}</p>
+            <h3 className="text-xl font-bold text-blue-900 mb-4">Profile</h3>
+            <p className="text-gray-700 text-sm leading-relaxed">{data.summary}</p>
           </div>
 
-          {/* Education */}
           <div>
-            <h2 className="text-lg font-bold text-gray-800 mb-4">Education</h2>
-            <div className="space-y-4">
+            <h3 className="text-xl font-bold text-blue-900 mb-4">Contact</h3>
+            <div className="space-y-2 text-sm">
+              <p className="text-gray-700">{data.email}</p>
+              <p className="text-gray-700">{data.phone}</p>
+              <p className="text-gray-700">linkedin.com/in/{data.fullName?.toLowerCase().replace(' ', '-')}</p>
+            </div>
+          </div>
+
+          <div>
+            <h3 className="text-xl font-bold text-blue-900 mb-4">Education</h3>
+            <div className="space-y-3">
               {data.education?.map((edu, index) => (
-                <div key={index} className="flex justify-between items-start">
-                  <div>
-                    <div className="text-xs text-gray-500">{edu.year}</div>
-                    <h3 className="font-bold text-gray-800 text-sm">{edu.school}</h3>
-                    <p className="text-gray-600 text-sm">{edu.degree}</p>
-                  </div>
-                  <div className="text-xs text-gray-400">Los Angeles</div>
+                <div key={index}>
+                  <p className="text-gray-500 text-xs">{edu.year}</p>
+                  <h4 className="font-semibold text-gray-900">{edu.school}</h4>
+                  <p className="text-gray-700 text-sm">{edu.degree}</p>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Employment */}
           <div>
-            <h2 className="text-lg font-bold text-gray-800 mb-4">Employment</h2>
+            <h3 className="text-xl font-bold text-blue-900 mb-4">Skills</h3>
+            <div className="grid grid-cols-2 gap-2 text-sm">
+              {data.skills?.slice(0, 8).map((skill, index) => (
+                <p key={index} className="text-gray-700">{skill}</p>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column - 3/5 width */}
+        <div className="col-span-3 space-y-6">
+          <div>
+            <h3 className="text-2xl font-bold text-blue-900 mb-6 border-b-2 border-blue-200 pb-2">
+              Experience
+            </h3>
             <div className="space-y-6">
               {data.experience?.map((exp, index) => (
                 <div key={index}>
                   <div className="flex justify-between items-start mb-2">
-                    <div>
-                      <div className="text-xs text-gray-500">{exp.period}</div>
-                      <h3 className="font-bold text-gray-800 text-sm">{exp.title}</h3>
-                    </div>
-                    <div className="text-xs text-gray-400">Los Angeles</div>
+                    <h4 className="text-lg font-bold text-gray-900">{exp.title}</h4>
+                    <span className="text-gray-500 text-sm">{exp.period}</span>
                   </div>
-                  <p className="text-gray-600 text-xs leading-relaxed">{exp.description}</p>
+                  <p className="text-blue-600 font-medium mb-2">{exp.company}</p>
+                  <p className="text-gray-700 text-sm leading-relaxed">{exp.description}</p>
                 </div>
               ))}
             </div>
-          </div>
-        </div>
-
-        {/* Right Column */}
-        <div>
-          <h2 className="text-lg font-bold text-gray-800 mb-4">Skills</h2>
-          <div className="space-y-3">
-            {data.skills?.map((skill, index) => (
-              <div key={index} className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                <span className="text-sm text-gray-700">{skill}</span>
-              </div>
-            ))}
           </div>
         </div>
       </div>
