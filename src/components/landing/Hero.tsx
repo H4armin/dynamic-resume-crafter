@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, FileText, Target } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Badge } from "@/components/ui/badge";
 
 const Hero = () => {
   return (
@@ -12,11 +13,16 @@ const Hero = () => {
       transition={{ duration: 0.6 }}
       className="text-center space-y-8"
     >
-      <div className="space-y-4">
+      <div className="space-y-6">
+        <Badge variant="secondary" className="bg-black text-white px-4 py-2 text-sm font-medium rounded-full">
+          ✨ AI-Powered Resume Builder
+        </Badge>
+        
         <h1 className="text-4xl md:text-6xl font-bold text-gray-900 leading-tight">
-          Create Your Perfect Resume in{" "}
-          <span className="text-blue-600">Minutes</span>
+          Create Your Perfect Resume{" "}
+          <span className="text-gray-400">in Minutes</span>
         </h1>
+        
         <p className="text-xl text-gray-600 max-w-3xl mx-auto">
           Build professional, ATS-friendly resumes with our AI-powered builder. 
           Choose from beautiful templates and get your resume analyzed for maximum impact.
