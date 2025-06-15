@@ -1,4 +1,3 @@
-
 import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -12,6 +11,10 @@ import { Template11 } from "@/components/resume-templates/Template11";
 import { Template12 } from "@/components/resume-templates/Template12";
 import { Template13 } from "@/components/resume-templates/Template13";
 import { Template14 } from "@/components/resume-templates/Template14";
+import { Template15 } from "@/components/resume-templates/Template15";
+import { Template16 } from "@/components/resume-templates/Template16";
+import { Template17 } from "@/components/resume-templates/Template17";
+import { Template18 } from "@/components/resume-templates/Template18";
 import { defaultResumeValues } from "@/types/resume";
 import { CustomizationProvider } from "@/contexts/CustomizationContext";
 
@@ -94,6 +97,14 @@ const Preview = () => {
         return <Template13 data={sampleData} />;
       case "template14":
         return <Template14 data={sampleData} />;
+      case "template15":
+        return <Template15 data={sampleData} />;
+      case "template16":
+        return <Template16 data={sampleData} />;
+      case "template17":
+        return <Template17 data={sampleData} />;
+      case "template18":
+        return <Template18 data={sampleData} />;
       default:
         return <Template1 data={sampleData} />;
     }
@@ -122,6 +133,14 @@ const Preview = () => {
         return "/lovable-uploads/40cefb1b-f64b-4545-8337-72cb45d1d10a.png";
       case "template14":
         return "/lovable-uploads/6ef5744f-4aad-40bc-9e18-75f0d15122de.png";
+      case "template15":
+        return "/placeholder.svg"; // You can upload specific images for these templates
+      case "template16":
+        return "/placeholder.svg";
+      case "template17":
+        return "/placeholder.svg";
+      case "template18":
+        return "/placeholder.svg";
       default:
         return "/uploads/449e5016-df65-47df-8d7c-ea19d579fb32.png";
     }

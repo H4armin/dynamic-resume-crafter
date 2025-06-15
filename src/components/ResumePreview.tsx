@@ -1,4 +1,3 @@
-
 import { ResumeFormValues } from "@/types/resume";
 import { useCustomization } from "@/contexts/CustomizationContext";
 import { Template1 } from "./resume-templates/Template1";
@@ -11,6 +10,10 @@ import { Template11 } from "./resume-templates/Template11";
 import { Template12 } from "./resume-templates/Template12";
 import { Template13 } from "./resume-templates/Template13";
 import { Template14 } from "./resume-templates/Template14";
+import { Template15 } from "./resume-templates/Template15";
+import { Template16 } from "./resume-templates/Template16";
+import { Template17 } from "./resume-templates/Template17";
+import { Template18 } from "./resume-templates/Template18";
 
 interface ResumePreviewProps {
   data: Partial<ResumeFormValues>;
@@ -43,6 +46,14 @@ const ResumePreview = ({ data, templateId }: ResumePreviewProps) => {
         return <Template13 data={data} />;
       case "template14":
         return <Template14 data={data} />;
+      case "template15":
+        return <Template15 data={data} />;
+      case "template16":
+        return <Template16 data={data} />;
+      case "template17":
+        return <Template17 data={data} />;
+      case "template18":
+        return <Template18 data={data} />;
       default:
         return <Template1 data={data} />; // Default to Template1
     }

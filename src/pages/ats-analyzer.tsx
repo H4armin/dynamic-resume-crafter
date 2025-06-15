@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Upload, FileText, Target, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import ATSResults from "@/components/ats/ATSResults";
+import CommentsSection from "@/components/ats/CommentsSection";
 
 const ATSAnalyzer = () => {
   const [resume, setResume] = useState("");
@@ -175,7 +177,12 @@ const ATSAnalyzer = () => {
         </div>
 
         {/* Results */}
-        {analysis && <ATSResults analysis={analysis} />}
+        {analysis && (
+          <div className="space-y-8">
+            <ATSResults analysis={analysis} />
+            <CommentsSection />
+          </div>
+        )}
       </div>
     </div>
   );
